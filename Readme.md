@@ -8,6 +8,8 @@ The API functionality provides the following functionality
 - Ability to set temperature of room and TRV thermostats
 - Ability to query various data about the system (like heating status)
 
+The project is closely associated with the Wiser HomeAssitant component availabe here https://github.com/asantaga/wiserHomeAssistantPlatform
+
 ## Installation
 
 
