@@ -1,2 +1,5 @@
 wiserkeys.params
 *.pyc
+build
+dist
+wiser_heating_api.egg-info
