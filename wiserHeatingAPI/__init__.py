@@ -1,1 +1,1 @@
-name="wiserHub"
+name="wiser-heating-api"
