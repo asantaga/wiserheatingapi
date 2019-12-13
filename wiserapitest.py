@@ -57,6 +57,9 @@ try:
             break
 # For devices in room.SmartValveIds:
     print ("Found Valve in room {}".format(roomName))
-
+# Setting HOME Mode , change to AWAY for away mode
+    wh.setHomeAwayMode("HOME")
+#    wh.setHomeAwayMode("AWAY",200)
+    
 except json.decoder.JSONDecodeError as ex:
     print("JSON Exception")

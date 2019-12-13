@@ -148,7 +148,8 @@ class wiserHub():
         return None 
 
     # Set HomeAwayMode
-    def setHomeAwayMode(self,mode,temperature=10):
+    # Default temp is 100 which is 10C
+    def setHomeAwayMode(self,mode,temperature=100):
         _LOGGER.info("Setting Home/Away mode to : {} {} C".format(mode,temperature/100))
         self.response=""
         self.patchData={}
