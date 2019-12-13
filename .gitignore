@@ -3,3 +3,4 @@ wiserkeys.params
 build
 dist
 wiser_heating_api.egg-info
+.idea
