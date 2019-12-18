@@ -186,7 +186,9 @@ class wiserHub():
             raise Exception("Error setting temperature, error {} ".format(self.response.text))
         _LOGGER.debug("Set room Temp, error {} ({})".format(self.response.status_code, self.response.text))
 
-    #Set Room Mode (Manual, Boost or Auto)
+    # Set Room Mode (Manual, Boost,Off or Auto )
+    # If set to off then the trv goes to manual and temperature of -200
+    #
     def setRoomMode(self,roomId, mode,boost_temp=20,boost_temp_time=30):
         # TODO
         _LOGGER.debug("Set Mode {} for a room {} ".format(mode,roomId))
@@ -198,9 +200,18 @@ class wiserHub():
             _LOGGER.debug("Setting Boost Temp to {}".format(temp))
             patchData={"RequestOverride":{"Type":"Manual","DurationMinutes": boost_temp_time, "SetPoint":temp, "Originator":"App"}}
         elif (mode.lower()=="manual"):
-            patchData={"Mode":"Manual"} 
+            # When setting back to manual , set the temp to the scheduled temp
+            newTemp=self.getRoom(roomId).get("ScheduledSetPoint")
+            patchData = {"Mode": "Manual",
+                         "RequestOverride": {"Type": "Manual",
+                                             "SetPoint": newTemp}}
+
+
+        # Implement trv off as per https://github.com/asantaga/wiserheatingapi/issues/3
+        elif (mode.lower()=="off"):
+            patchData = {"Mode": "Manual","RequestOverride": {"Type": "Manual","SetPoint": -200}}
         else:
-            raise Exception("Error setting setting room mode, received  {} but should be auto,boost or manual ".format(mode))
+            raise Exception("Error setting setting room mode, received  {} but should be auto,boost,off or manual ".format(mode))
         
         # if not a boost operation cancel any current boost
         if (mode.lower()!="boost"):
@@ -208,8 +219,9 @@ class wiserHub():
             
             self.response = requests.patch(WISERROOM.format(self.hubIP,roomId), headers=self.headers,json=cancelBoostPostData)
             if (self.response.status_code != 200):
-                _LOGGER.error("Cancelling boostresulted in {}".format(self.response.status_code))
+                _LOGGER.error("Cancelling boost resulted in {}".format(self.response.status_code))
                 raise Exception("Error cancelling boost {} ".format(mode))
+
         # Set new mode
         self.response = requests.patch(WISERROOM.format(
             self.hubIP,roomId), headers=self.headers,json=patchData)        
