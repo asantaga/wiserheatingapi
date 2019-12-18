@@ -59,7 +59,10 @@ try:
 #    wh.setRoomMode(4,"off")
 # Set room 4 TRVs to manual, setting normal scheduled temp
 #    wh.setRoomMode(4,"manual")
+# Set temperature of room 4 to 13C
+#    wh.setRoomTemperature(4,130)
+# Set TRV off in room 4 to 13C
+#    wh.setRoomTemperature(4,-200)
 
-    
 except json.decoder.JSONDecodeError as ex:
     print("JSON Exception")

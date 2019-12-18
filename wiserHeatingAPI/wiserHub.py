@@ -170,10 +170,12 @@ class wiserHub():
 
 
     # Set Room Temperature
+    # Sets room temperature. Valid values are from 50 to 300 (5C-30C) and -200 being off
+    #
     def setRoomTemperature(self, roomId, temperature):
         _LOGGER.info("Set Room {} Temperature to = {} ".format(roomId,temperature))
-        if (temperature<1 or temperature>40):
-            raise Exception("SetRoomTemperature : value of temperature must be between 1 and 40")
+        if ((temperature!=-200) and (temperature<50 or temperature>300)):
+            raise Exception("SetRoomTemperature : value of temperature must be between 50 and 300 OR -200(off)")
 
         # the temp needs to be a whole number, so e.g. 19.5 -> 195
         apitemp = (str(temperature)).replace('.', '')
@@ -185,6 +187,9 @@ class wiserHub():
             _LOGGER.error("Set Room {} Temperature to = {} resulted in {}".format(roomId,temperature,self.response.status_code))
             raise Exception("Error setting temperature, error {} ".format(self.response.text))
         _LOGGER.debug("Set room Temp, error {} ({})".format(self.response.status_code, self.response.text))
+
+
+
 
     # Set Room Mode (Manual, Boost,Off or Auto )
     # If set to off then the trv goes to manual and temperature of -200

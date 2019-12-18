@@ -46,3 +46,4 @@ To help understand the api simply look at the sample code ```wiserapitest.py``` 
 
 Changes
 1.0.2.1 :  Added ability to turn trvs off and then back on by using setRoomMode
+           Fixed bug in setRoomTemperature that wasnt checking the ranges properly
