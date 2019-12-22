@@ -1,0 +1,2491 @@
+<!doctype html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+
+    <title>wiserHub API documentation</title>
+    <meta name="description" content="# Wiser API Facade
+
+Angelosantagata@gmail.com
+
+
+https://github.com/asantaga/wiserheatingapi
+
+
+This A..." />
+
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
+  
+  <style type="text/css">
+  
+* {
+  box-sizing: border-box;
+}
+/*! normalize.css v1.1.1 | MIT License | git.io/normalize */
+
+/* ==========================================================================
+   HTML5 display definitions
+   ========================================================================== */
+
+/**
+ * Correct `block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+    display: block;
+}
+
+/**
+ * Correct `inline-block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+audio,
+canvas,
+video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+/**
+ * Prevent modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
+
+audio:not([controls]) {
+    display: none;
+    height: 0;
+}
+
+/**
+ * Address styling not present in IE 7/8/9, Firefox 3, and Safari 4.
+ * Known issue: no IE 6 support.
+ */
+
+[hidden] {
+    display: none;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+/**
+ * 1. Prevent system color scheme's background color being used in Firefox, IE,
+ *    and Opera.
+ * 2. Prevent system color scheme's text color being used in Firefox, IE, and
+ *    Opera.
+ * 3. Correct text resizing oddly in IE 6/7 when body `font-size` is set using
+ *    `em` units.
+ * 4. Prevent iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ */
+
+html {
+    background: #fff; /* 1 */
+    color: #000; /* 2 */
+    font-size: 100%; /* 3 */
+    -webkit-text-size-adjust: 100%; /* 4 */
+    -ms-text-size-adjust: 100%; /* 4 */
+}
+
+/**
+ * Address `font-family` inconsistency between `textarea` and other form
+ * elements.
+ */
+
+html,
+button,
+input,
+select,
+textarea {
+    font-family: sans-serif;
+}
+
+/**
+ * Address margins handled incorrectly in IE 6/7.
+ */
+
+body {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Links
+   ========================================================================== */
+
+/**
+ * Address `outline` inconsistency between Chrome and other browsers.
+ */
+
+a:focus {
+    outline: thin dotted;
+}
+
+/**
+ * Improve readability when focused and also mouse hovered in all browsers.
+ */
+
+a:active,
+a:hover {
+    outline: 0;
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+/**
+ * Address font sizes and margins set differently in IE 6/7.
+ * Address font sizes within `section` and `article` in Firefox 4+, Safari 5,
+ * and Chrome.
+ */
+
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin: 0.83em 0;
+}
+
+h3 {
+    font-size: 1.17em;
+    margin: 1em 0;
+}
+
+h4 {
+    font-size: 1em;
+    margin: 1.33em 0;
+}
+
+h5 {
+    font-size: 0.83em;
+    margin: 1.67em 0;
+}
+
+h6 {
+    font-size: 0.67em;
+    margin: 2.33em 0;
+}
+
+/**
+ * Address styling not present in IE 7/8/9, Safari 5, and Chrome.
+ */
+
+abbr[title] {
+    border-bottom: 1px dotted;
+}
+
+/**
+ * Address style set to `bolder` in Firefox 3+, Safari 4/5, and Chrome.
+ */
+
+b,
+strong {
+    font-weight: bold;
+}
+
+blockquote {
+    margin: 1em 40px;
+}
+
+/**
+ * Address styling not present in Safari 5 and Chrome.
+ */
+
+dfn {
+    font-style: italic;
+}
+
+/**
+ * Address differences between Firefox and other browsers.
+ * Known issue: no IE 6/7 normalization.
+ */
+
+hr {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 0;
+}
+
+/**
+ * Address styling not present in IE 6/7/8/9.
+ */
+
+mark {
+    background: #ff0;
+    color: #000;
+}
+
+/**
+ * Address margins set differently in IE 6/7.
+ */
+
+p,
+pre {
+    margin: 1em 0;
+}
+
+/**
+ * Correct font family set oddly in IE 6, Safari 4/5, and Chrome.
+ */
+
+code,
+kbd,
+pre,
+samp {
+    font-family: monospace, serif;
+    _font-family: 'courier new', monospace;
+    font-size: 1em;
+}
+
+/**
+ * Improve readability of pre-formatted text in all browsers.
+ */
+
+pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/**
+ * Address CSS quotes not supported in IE 6/7.
+ */
+
+q {
+    quotes: none;
+}
+
+/**
+ * Address `quotes` property not supported in Safari 4.
+ */
+
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+/**
+ * Address inconsistent and variable font size in all browsers.
+ */
+
+small {
+    font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ */
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+/* ==========================================================================
+   Lists
+   ========================================================================== */
+
+/**
+ * Address margins set differently in IE 6/7.
+ */
+
+dl,
+menu,
+ol,
+ul {
+    margin: 1em 0;
+}
+
+dd {
+    margin: 0 0 0 40px;
+}
+
+/**
+ * Address paddings set differently in IE 6/7.
+ */
+
+menu,
+ol,
+ul {
+    padding: 0 0 0 40px;
+}
+
+/**
+ * Correct list images handled incorrectly in IE 7.
+ */
+
+nav ul,
+nav ol {
+    list-style: none;
+    list-style-image: none;
+}
+
+/* ==========================================================================
+   Embedded content
+   ========================================================================== */
+
+/**
+ * 1. Remove border when inside `a` element in IE 6/7/8/9 and Firefox 3.
+ * 2. Improve image quality when scaled in IE 7.
+ */
+
+img {
+    border: 0; /* 1 */
+    -ms-interpolation-mode: bicubic; /* 2 */
+}
+
+/**
+ * Correct overflow displayed oddly in IE 9.
+ */
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   Figures
+   ========================================================================== */
+
+/**
+ * Address margin not present in IE 6/7/8/9, Safari 5, and Opera 11.
+ */
+
+figure {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+/**
+ * Correct margin displayed oddly in IE 6/7.
+ */
+
+form {
+    margin: 0;
+}
+
+/**
+ * Define consistent border, margin, and padding.
+ */
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct color not being inherited in IE 6/7/8/9.
+ * 2. Correct text not wrapping in Firefox 3.
+ * 3. Correct alignment displayed oddly in IE 6/7.
+ */
+
+legend {
+    border: 0; /* 1 */
+    padding: 0;
+    white-space: normal; /* 2 */
+    *margin-left: -7px; /* 3 */
+}
+
+/**
+ * 1. Correct font size not being inherited in all browsers.
+ * 2. Address margins set differently in IE 6/7, Firefox 3+, Safari 5,
+ *    and Chrome.
+ * 3. Improve appearance and consistency in all browsers.
+ */
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%; /* 1 */
+    margin: 0; /* 2 */
+    vertical-align: baseline; /* 3 */
+    *vertical-align: middle; /* 3 */
+}
+
+/**
+ * Address Firefox 3+ setting `line-height` on `input` using `!important` in
+ * the UA stylesheet.
+ */
+
+button,
+input {
+    line-height: normal;
+}
+
+/**
+ * Address inconsistent `text-transform` inheritance for `button` and `select`.
+ * All other form control elements do not inherit `text-transform` values.
+ * Correct `button` style inheritance in Chrome, Safari 5+, and IE 6+.
+ * Correct `select` style inheritance in Firefox 4+ and Opera.
+ */
+
+button,
+select {
+    text-transform: none;
+}
+
+/**
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Correct inability to style clickable `input` types in iOS.
+ * 3. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ * 4. Remove inner spacing in IE 7 without affecting normal text inputs.
+ *    Known issue: inner spacing remains in IE 6.
+ */
+
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+    -webkit-appearance: button; /* 2 */
+    cursor: pointer; /* 3 */
+    *overflow: visible;  /* 4 */
+}
+
+/**
+ * Re-set default cursor for disabled elements.
+ */
+
+button[disabled],
+html input[disabled] {
+    cursor: default;
+}
+
+/**
+ * 1. Address box sizing set to content-box in IE 8/9.
+ * 2. Remove excess padding in IE 8/9.
+ * 3. Remove excess padding in IE 7.
+ *    Known issue: excess padding remains in IE 6.
+ */
+
+input[type="checkbox"],
+input[type="radio"] {
+    box-sizing: border-box; /* 1 */
+    padding: 0; /* 2 */
+    *height: 13px; /* 3 */
+    *width: 13px; /* 3 */
+}
+
+/**
+ * 1. Address `appearance` set to `searchfield` in Safari 5 and Chrome.
+ * 2. Address `box-sizing` set to `border-box` in Safari 5 and Chrome
+ *    (include `-moz` to future-proof).
+ */
+
+input[type="search"] {
+    -webkit-appearance: textfield; /* 1 */
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; /* 2 */
+    box-sizing: content-box;
+}
+
+/**
+ * Remove inner padding and search cancel button in Safari 5 and Chrome
+ * on OS X.
+ */
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+/**
+ * Remove inner padding and border in Firefox 3+.
+ */
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/**
+ * 1. Remove default vertical scrollbar in IE 6/7/8/9.
+ * 2. Improve readability and alignment in all browsers.
+ */
+
+textarea {
+    overflow: auto; /* 1 */
+    vertical-align: top; /* 2 */
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+
+/**
+ * Remove most spacing between table cells.
+ */
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+  </style>
+
+  <style type="text/css">
+  
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+  }
+  body {
+    background: #fff;
+    font-family: "Source Sans Pro", "Helvetica Neueue", Helvetica, sans;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6em;
+  }
+  #content {
+    width: 70%;
+    max-width: 850px;
+    float: left;
+    padding: 30px 60px;
+    border-left: 1px solid #ddd;
+  }
+  #sidebar {
+    width: 25%;
+    float: left;
+    padding: 30px;
+    overflow: hidden;
+  }
+  #nav {
+    font-size: 130%;
+    margin: 0 0 15px 0;
+  }
+
+  #top {
+    display: block;
+    position: fixed;
+    bottom: 5px;
+    left: 5px;
+    font-size: .85em;
+    text-transform: uppercase;
+  }
+
+  #footer {
+    font-size: .75em;
+    padding: 5px 30px;
+    border-top: 1px solid #ddd;
+    text-align: right;
+  }
+    #footer p {
+      margin: 0 0 0 30px;
+      display: inline-block;
+    }
+
+  h1, h2, h3, h4, h5 {
+    font-weight: 300;
+  }
+  h1 {
+    font-size: 2.5em;
+    line-height: 1.1em;
+    margin: 0 0 .50em 0;
+  }
+
+  h2 {
+    font-size: 1.75em;
+    margin: 1em 0 .50em 0;
+  }
+
+  h3 {
+    margin: 25px 0 10px 0;
+  }
+
+  h4 {
+    margin: 0;
+    font-size: 105%;
+  }
+
+  a {
+    color: #058;
+    text-decoration: none;
+    transition: color .3s ease-in-out;
+  }
+
+  a:hover {
+    color: #e08524;
+    transition: color .3s ease-in-out;
+  }
+
+  pre, code, .mono, .name {
+    font-family: "Ubuntu Mono", "Cousine", "DejaVu Sans Mono", monospace;
+  }
+
+  .title .name {
+    font-weight: bold;
+  }
+  .section-title {
+    margin-top: 2em;
+  }
+  .ident {
+    color: #900;
+  }
+
+  code {
+    background: #f9f9f9;
+  } 
+
+  pre {
+    background: #fefefe;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 0 #f3f3f3;
+    margin: 0 30px;
+    padding: 15px 30px;
+  }
+
+  .codehilite {
+    margin: 0 30px 10px 30px;
+  }
+
+    .codehilite pre {
+      margin: 0;
+    }
+    .codehilite .err { background: #ff3300; color: #fff !important; } 
+
+  table#module-list {
+    font-size: 110%;
+  }
+
+    table#module-list tr td:first-child {
+      padding-right: 10px;
+      white-space: nowrap;
+    }
+
+    table#module-list td {
+      vertical-align: top;
+      padding-bottom: 8px;
+    }
+
+      table#module-list td p {
+        margin: 0 0 7px 0;
+      }
+
+  .def {
+    display: table;
+  }
+
+    .def p {
+      display: table-cell;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .def p:first-child {
+      white-space: nowrap;
+    }
+
+    .def p:last-child {
+      width: 100%;
+    }
+
+
+  #index {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+    ul#index .class_name {
+      /* font-size: 110%; */
+      font-weight: bold;
+    }
+    #index ul {
+      margin: 0;
+    }
+
+  .item {
+    margin: 0 0 15px 0;
+  }
+
+    .item .class {
+      margin: 0 0 25px 30px;
+    }
+
+      .item .class ul.class_list {
+        margin: 0 0 20px 0;
+      }
+
+    .item .name {
+      background: #fafafa;
+      margin: 0;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 3px;
+      display: inline-block;
+      min-width: 40%;
+    }
+      .item .name:hover {
+        background: #f6f6f6;
+      }
+
+    .item .empty_desc {
+      margin: 0 0 5px 0;
+      padding: 0;
+    }
+
+    .item .inheritance {
+      margin: 3px 0 0 30px;
+    }
+
+    .item .inherited {
+      color: #666;
+    }
+
+    .item .desc {
+      padding: 0 8px;
+      margin: 0;
+    }
+
+      .item .desc p {
+        margin: 0 0 10px 0;
+      }
+
+    .source_cont {
+      margin: 0;
+      padding: 0;
+    }
+
+    .source_link a {
+      background: #ffc300;
+      font-weight: 400;
+      font-size: .75em;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 1px 1px 0 #f4b700;
+      
+      padding: 3px 8px;
+      border-radius: 2px;
+      transition: background .3s ease-in-out;
+    }
+      .source_link a:hover {
+        background: #FF7200;
+        text-shadow: none;
+        transition: background .3s ease-in-out;
+      }
+
+    .source {
+      display: none;
+      max-height: 600px;
+      overflow-y: scroll;
+      margin-bottom: 15px;
+    }
+
+      .source .codehilite {
+        margin: 0;
+      }
+
+  .desc h1, .desc h2, .desc h3 {
+    font-size: 100% !important;
+  }
+  .clear {
+    clear: both;
+  }
+
+  @media all and (max-width: 950px) {
+    #sidebar {
+      width: 35%;
+    }
+    #content {
+      width: 65%;
+    }
+  }
+  @media all and (max-width: 650px) {
+    #top {
+      display: none;
+    }
+    #sidebar {
+      float: none;
+      width: auto;
+    }
+    #content {
+      float: none;
+      width: auto;
+      padding: 30px;
+    }
+
+    #index ul {
+      padding: 0;
+      margin-bottom: 15px;
+    }
+    #index ul li {
+      display: inline-block;
+      margin-right: 30px;
+    }
+    #footer {
+      text-align: left;
+    }
+    #footer p {
+      display: block;
+      margin: inherit;
+    }
+  }
+
+  /*****************************/
+
+  </style>
+
+  <style type="text/css">
+  .codehilite .hll { background-color: #ffffcc }
+.codehilite  { background: #f8f8f8; }
+.codehilite .c { color: #408080; font-style: italic } /* Comment */
+.codehilite .err { border: 1px solid #FF0000 } /* Error */
+.codehilite .k { color: #008000; font-weight: bold } /* Keyword */
+.codehilite .o { color: #666666 } /* Operator */
+.codehilite .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+.codehilite .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.codehilite .cp { color: #BC7A00 } /* Comment.Preproc */
+.codehilite .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+.codehilite .c1 { color: #408080; font-style: italic } /* Comment.Single */
+.codehilite .cs { color: #408080; font-style: italic } /* Comment.Special */
+.codehilite .gd { color: #A00000 } /* Generic.Deleted */
+.codehilite .ge { font-style: italic } /* Generic.Emph */
+.codehilite .gr { color: #FF0000 } /* Generic.Error */
+.codehilite .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #00A000 } /* Generic.Inserted */
+.codehilite .go { color: #888888 } /* Generic.Output */
+.codehilite .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.codehilite .gs { font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #0044DD } /* Generic.Traceback */
+.codehilite .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.codehilite .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.codehilite .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.codehilite .kp { color: #008000 } /* Keyword.Pseudo */
+.codehilite .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.codehilite .kt { color: #B00040 } /* Keyword.Type */
+.codehilite .m { color: #666666 } /* Literal.Number */
+.codehilite .s { color: #BA2121 } /* Literal.String */
+.codehilite .na { color: #7D9029 } /* Name.Attribute */
+.codehilite .nb { color: #008000 } /* Name.Builtin */
+.codehilite .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.codehilite .no { color: #880000 } /* Name.Constant */
+.codehilite .nd { color: #AA22FF } /* Name.Decorator */
+.codehilite .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.codehilite .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.codehilite .nf { color: #0000FF } /* Name.Function */
+.codehilite .nl { color: #A0A000 } /* Name.Label */
+.codehilite .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.codehilite .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.codehilite .nv { color: #19177C } /* Name.Variable */
+.codehilite .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.codehilite .w { color: #bbbbbb } /* Text.Whitespace */
+.codehilite .mb { color: #666666 } /* Literal.Number.Bin */
+.codehilite .mf { color: #666666 } /* Literal.Number.Float */
+.codehilite .mh { color: #666666 } /* Literal.Number.Hex */
+.codehilite .mi { color: #666666 } /* Literal.Number.Integer */
+.codehilite .mo { color: #666666 } /* Literal.Number.Oct */
+.codehilite .sa { color: #BA2121 } /* Literal.String.Affix */
+.codehilite .sb { color: #BA2121 } /* Literal.String.Backtick */
+.codehilite .sc { color: #BA2121 } /* Literal.String.Char */
+.codehilite .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.codehilite .s2 { color: #BA2121 } /* Literal.String.Double */
+.codehilite .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.codehilite .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.codehilite .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.codehilite .sx { color: #008000 } /* Literal.String.Other */
+.codehilite .sr { color: #BB6688 } /* Literal.String.Regex */
+.codehilite .s1 { color: #BA2121 } /* Literal.String.Single */
+.codehilite .ss { color: #19177C } /* Literal.String.Symbol */
+.codehilite .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #0000FF } /* Name.Function.Magic */
+.codehilite .vc { color: #19177C } /* Name.Variable.Class */
+.codehilite .vg { color: #19177C } /* Name.Variable.Global */
+.codehilite .vi { color: #19177C } /* Name.Variable.Instance */
+.codehilite .vm { color: #19177C } /* Name.Variable.Magic */
+.codehilite .il { color: #666666 } /* Literal.Number.Integer.Long */
+  </style>
+
+  <style type="text/css">
+  
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+    /* Style adjustments for viewports that meet the condition */
+}
+
+@media print,
+       (-o-min-device-pixel-ratio: 5/4),
+       (-webkit-min-device-pixel-ratio: 1.25),
+       (min-resolution: 120dpi) {
+    /* Style adjustments for high resolution devices */
+}
+
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid required HTTP connection: h5bp.com/r
+   ========================================================================== */
+
+@media print {
+    * {
+        background: transparent !important;
+        color: #000 !important; /* Black prints faster: h5bp.com/s */
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    /*
+     * Don't show links for images, or javascript/internal links
+     */
+
+    .ir a:after,
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: "";
+    }
+
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group; /* h5bp.com/t */
+    }
+
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    @page {
+        margin: 0.5cm;
+    }
+
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+}
+
+  </style>
+
+  <script type="text/javascript">
+  function toggle(id, $link) {
+    $node = document.getElementById(id);
+    if (!$node)
+    return;
+    if (!$node.style.display || $node.style.display == 'none') {
+    $node.style.display = 'block';
+    $link.innerHTML = 'Hide source &nequiv;';
+    } else {
+    $node.style.display = 'none';
+    $link.innerHTML = 'Show source &equiv;';
+    }
+  }
+  </script>
+</head>
+<body>
+<a href="#" id="top">Top</a>
+
+<div id="container">
+    
+  
+  <div id="sidebar">
+    <h1>Index</h1>
+    <ul id="index">
+    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#wiserHub.WISERHUBURL">WISERHUBURL</a></li>
+    <li class="mono"><a href="#wiserHub.WISERMODEURL">WISERMODEURL</a></li>
+    <li class="mono"><a href="#wiserHub.WISERROOM">WISERROOM</a></li>
+    <li class="mono"><a href="#wiserHub.WISERSETROOMTEMP">WISERSETROOMTEMP</a></li>
+  </ul>
+
+    </li>
+
+
+    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
+      <ul>
+        <li class="mono">
+        <span class="class_name"><a href="#wiserHub.wiserHub">wiserHub</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#wiserHub.wiserHub.__init__">__init__</a></li>
+    <li class="mono"><a href="#wiserHub.wiserHub.getDevice">getDevice</a></li>
+    <li class="mono"><a href="#wiserHub.wiserHub.getDeviceRoom">getDeviceRoom</a></li>
+    <li class="mono"><a href="#wiserHub.wiserHub.getDevices">getDevices</a></li>
+    <li class="mono"><a href="#wiserHub.wiserHub.getHeatingChannels">getHeatingChannels</a></li>
+    <li class="mono"><a href="#wiserHub.wiserHub.getHeatingRelayStatus">getHeatingRelayStatus</a></li>
+    <li class="mono"><a href="#wiserHub.wiserHub.getHotwater">getHotwater</a></li>
+    <li class="mono"><a href="#wiserHub.wiserHub.getHotwaterRelayStatus">getHotwaterRelayStatus</a></li>
+    <li class="mono"><a href="#wiserHub.wiserHub.getHubData">getHubData</a></li>
+    <li class="mono"><a href="#wiserHub.wiserHub.getRoom">getRoom</a></li>
+    <li class="mono"><a href="#wiserHub.wiserHub.getRoomStatData">getRoomStatData</a></li>
+    <li class="mono"><a href="#wiserHub.wiserHub.getRooms">getRooms</a></li>
+    <li class="mono"><a href="#wiserHub.wiserHub.getSystem">getSystem</a></li>
+    <li class="mono"><a href="#wiserHub.wiserHub.refreshData">refreshData</a></li>
+    <li class="mono"><a href="#wiserHub.wiserHub.setHomeAwayMode">setHomeAwayMode</a></li>
+    <li class="mono"><a href="#wiserHub.wiserHub.setRoomMode">setRoomMode</a></li>
+    <li class="mono"><a href="#wiserHub.wiserHub.setRoomTemperature">setRoomTemperature</a></li>
+  </ul>
+
+        </li>
+      </ul>
+    </li>
+
+    </ul>
+  </div>
+
+    <article id="content">
+      
+  
+
+  
+
+
+  <header id="section-intro">
+  <h1 class="title"><span class="name">wiserHub</span> module</h1>
+  <h1>Wiser API Facade</h1>
+<p>Angelosantagata@gmail.com</p>
+<p>https://github.com/asantaga/wiserheatingapi</p>
+<p>This API Facade allows you to communicate with your wiserhub. This API is used by the homeassistant integration available at  https://github.com/asantaga/wiserHomeAssistantPlatform</p>
+  
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wiserHub', this);">Show source &equiv;</a></p>
+  <div id="source-wiserHub" class="source">
+    <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># Wiser API Facade</span>
+
+<span class="sd">Angelosantagata@gmail.com</span>
+
+
+<span class="sd">https://github.com/asantaga/wiserheatingapi</span>
+
+
+<span class="sd">This API Facade allows you to communicate with your wiserhub. This API is used by the homeassistant integration available at  https://github.com/asantaga/wiserHomeAssistantPlatform</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">_LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Wiser Data URLS</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">WISERHUBURL</span> <span class="o">=</span> <span class="s2">&quot;http://{}/data/domain/&quot;</span>    <span class="c1"># SSSS</span>
+<span class="n">WISERMODEURL</span><span class="o">=</span> <span class="s2">&quot;http://{}/data/domain/System/RequestOverride&quot;</span>
+<span class="n">WISERSETROOMTEMP</span><span class="o">=</span> <span class="s2">&quot;http://{}//data/domain/Room/{}&quot;</span>
+<span class="n">WISERROOM</span><span class="o">=</span><span class="s2">&quot;http://{}//data/domain/Room/{}&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">wiserHub</span><span class="p">():</span>
+   
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">hubIP</span><span class="p">,</span><span class="n">secret</span><span class="p">):</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;WiserHub API Init&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">=</span><span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hubIP</span><span class="o">=</span><span class="n">hubIP</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hubSecret</span><span class="o">=</span><span class="n">secret</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;SECRET&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hubSecret</span><span class="p">,</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json;charset=UTF-8&#39;</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="o">=</span><span class="p">{}</span>      <span class="c1"># Dict holding Valve2Room mapping convinience variable</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>          <span class="c1"># Issue first refresh in init</span>
+        
+    <span class="k">def</span> <span class="nf">refreshData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Forces a refresh of data</span>
+<span class="sd">        return: JSON Data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">smartValves</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Updating Wiser Hub Data&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">WISERHUBURL</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hubIP</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Wiser Hub Data received {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">getRooms</span><span class="p">()</span><span class="o">!=</span><span class="bp">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getRooms</span><span class="p">():</span>
+                <span class="n">roomStatId</span><span class="o">=</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RoomStatId&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">roomStatId</span><span class="o">!=</span><span class="bp">None</span><span class="p">:</span>
+                    <span class="c1">#RoomStat found add it to the list</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="p">[</span><span class="n">roomStatId</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;roomId&quot;</span><span class="p">:</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">),</span> <span class="s2">&quot;roomName&quot;</span><span class="p">:</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">)}</span>
+                <span class="n">smartValves</span><span class="o">=</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SmartValveIds&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">smartValves</span><span class="o">!=</span><span class="bp">None</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">valveId</span> <span class="ow">in</span> <span class="n">smartValves</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="p">[</span><span class="n">valveId</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;roomId&quot;</span><span class="p">:</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">),</span> <span class="s2">&quot;roomName&quot;</span><span class="p">:</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">)}</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot; Room doesnt contain any smart valves, maybe an error/corruption?? &quot;</span><span class="p">)</span>
+            <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot; valve2roomMap{} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Wiser found no rooms&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span>
+
+        
+
+    <span class="k">def</span> <span class="nf">getHubData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the full JSON payload , for functions where I havent provided a API yet</span>
+
+<span class="sd">        returns : JSON Data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span>
+
+    <span class="k">def</span> <span class="nf">getRooms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets Room Data as JSON Payload</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Room&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">getRoom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">roomId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convinience to get data on a single room</span>
+
+<span class="sd">        param roomId: The roomID</span>
+<span class="sd">        return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Room&quot;</span><span class="p">)</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="n">_LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;getRoom called but no rooms found&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Room&quot;</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span><span class="o">==</span><span class="n">roomId</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">room</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">getSystem</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convinience function to get system information</span>
+
+<span class="sd">        return: JSON with system data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;System&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getHotwater</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convinience function to get hotwater data</span>
+
+<span class="sd">        return: JSON with hotwater data</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;HotWater&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getHeatingChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convinience function to get heating channel data</span>
+
+<span class="sd">        return: JSON data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;HeatingChannel&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getDevices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convinience function to get devices data</span>
+
+<span class="sd">        return: JSON data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Device&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getDevice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">deviceId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get single devices data</span>
+
+<span class="sd">        param deviceId:</span>
+<span class="sd">        return: Device JSON Data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Device&quot;</span><span class="p">)</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="n">_LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;getRoom called but no rooms found&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Device&quot;</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span><span class="o">==</span><span class="n">deviceId</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">device</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+
+    <span class="k">def</span> <span class="nf">getDeviceRoom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">deviceId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convinience function to return the name of a room which is associated with a device (roomstat or trf)</span>
+
+<span class="sd">        param deviceId:</span>
+<span class="sd">        return: Name of Room associated with a device ID</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot; getDeviceRoom called, valve2roomMap is {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="p">[</span><span class="n">deviceId</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">getHeatingRelayStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns heating relay status</span>
+<span class="sd">        return:  On or Off</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="n">heatingRelayStatus</span><span class="o">=</span><span class="s2">&quot;Off&quot;</span>
+        <span class="c1"># There could be multiple heating channels, </span>
+        <span class="n">heatingChannels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">getHeatingChannels</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">heatingChannel</span> <span class="ow">in</span> <span class="n">heatingChannels</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">heatingChannel</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;HeatingRelayState&quot;</span><span class="p">)</span><span class="o">==</span><span class="s2">&quot;On&quot;</span><span class="p">:</span>
+                <span class="n">heatingRelayStatus</span><span class="o">=</span><span class="s2">&quot;On&quot;</span>
+        <span class="k">return</span> <span class="n">heatingRelayStatus</span>
+    
+    <span class="k">def</span> <span class="nf">getHotwaterRelayStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         Returns hotwater relay status</span>
+<span class="sd">        return:  On or Off</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;HotWater&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;WaterHeatingState&quot;</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">getRoomStatData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">deviceId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets Roomt Thermostats Data</span>
+
+<span class="sd">        param deviceId:</span>
+<span class="sd">        return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="p">[</span><span class="s1">&#39;RoomStat&#39;</span><span class="p">]</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+                <span class="n">_LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;getRoom called but no rooms found&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">for</span> <span class="n">roomStat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="p">[</span><span class="s1">&#39;RoomStat&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">roomStat</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span><span class="o">==</span><span class="n">deviceId</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">roomStat</span>
+        <span class="k">return</span> <span class="bp">None</span> 
+
+    <span class="k">def</span> <span class="nf">setHomeAwayMode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mode</span><span class="p">,</span><span class="n">temperature</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets default Home or Away mode, optionally allows you to set a temperature for away mode</span>
+
+<span class="sd">        param mode: HOME   | AWAY</span>
+
+<span class="sd">        param temperature: Temperature between 5-30C or -20 for OFF</span>
+
+<span class="sd">        return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Setting Home/Away mode to : {} {} C&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span><span class="n">temperature</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">patchData</span><span class="o">=</span><span class="p">{}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;HOME&#39;</span><span class="p">,</span><span class="s1">&#39;AWAY&#39;</span><span class="p">]):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;setAwayHome can only be HOME or AWAY&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">mode</span><span class="o">==</span><span class="s2">&quot;AWAY&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">temperature</span><span class="o">==</span><span class="bp">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;setAwayHome set to AWAY but not temperature set&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">temperature</span><span class="o">==</span> <span class="o">-</span><span class="mi">20</span> <span class="ow">or</span> <span class="n">temperature</span> <span class="o">&lt;</span><span class="mi">0</span> <span class="ow">or</span> <span class="n">temperature</span><span class="o">&gt;</span><span class="mi">30</span><span class="p">:</span>
+              <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;setAwayHome temperature can only be between 5 and 30 or -20(Off)&quot;</span><span class="p">)</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Setting Home/Away : {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="o">*</span><span class="mi">10</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mode</span><span class="o">==</span><span class="s2">&quot;AWAY&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patchData</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;setPoint&quot;</span><span class="p">:</span><span class="n">temperature</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patchData</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;setPoint&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span> <span class="p">(</span><span class="s2">&quot;patchdata {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patchData</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">WISERMODEURL</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hubIP</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span><span class="n">json</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">patchData</span> <span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="o">!=</span><span class="mi">200</span><span class="p">):</span>
+            <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Set Home/Away Response code = {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error setting Home/Away , error {} {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+
+
+
+    <span class="k">def</span> <span class="nf">setRoomTemperature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">roomId</span><span class="p">,</span> <span class="n">temperature</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the room temperature</span>
+<span class="sd">        param roomId:  The Room ID</span>
+<span class="sd">        param temperature:  The temperature in celcius from 5 to 30, -20 for Off</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Set Room {} Temperature to = {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">roomId</span><span class="p">,</span><span class="n">temperature</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">temperature</span><span class="o">!=-</span><span class="mi">20</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">temperature</span><span class="o">&lt;</span><span class="mi">5</span> <span class="ow">or</span> <span class="n">temperature</span><span class="o">&gt;</span><span class="mi">30</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;SetRoomTemperature : value of temperature must be between 5 and 30 OR -20 (off)&quot;</span><span class="p">)</span>
+        <span class="n">apitemp</span><span class="o">=</span><span class="n">temperature</span><span class="o">*</span><span class="mi">10</span>
+        <span class="n">patchData</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;RequestOverride&quot;</span><span class="p">:{</span><span class="s2">&quot;Type&quot;</span><span class="p">:</span><span class="s2">&quot;Manual&quot;</span><span class="p">,</span><span class="s2">&quot;SetPoint&quot;</span><span class="p">:</span><span class="n">apitemp</span><span class="p">}}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">WISERSETROOMTEMP</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hubIP</span><span class="p">,</span><span class="n">roomId</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span><span class="n">json</span><span class="o">=</span><span class="n">patchData</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">_LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Set Room {} Temperature to = {} resulted in {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">roomId</span><span class="p">,</span><span class="n">temperature</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error setting temperature, error {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Set room Temp, error {} ({})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+
+
+
+
+    <span class="c1"># Set Room Mode (Manual, Boost,Off or Auto )</span>
+    <span class="c1"># If set to off then the trv goes to manual and temperature of -200</span>
+    <span class="c1">#</span>
+    <span class="k">def</span> <span class="nf">setRoomMode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">roomId</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span><span class="n">boost_temp</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">boost_temp_time</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the Room Mode, this can be Auto, Manual, off or Boost. When you set the mode back to Auto it will automatically take the scheduled temperature</span>
+
+<span class="sd">        param roomId: RoomId</span>
+
+<span class="sd">        param mode:  Mode (auto, manual off, or boost)</span>
+
+<span class="sd">        param boost_temp:  If boosting enter the temperature here in C, can be between 5-30</span>
+
+<span class="sd">        param boost_temp_time:  How long to boost for in minutes</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Set Mode {} for a room {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span><span class="n">roomId</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s2">&quot;auto&quot;</span><span class="p">):</span>
+            <span class="c1">#Do Auto</span>
+            <span class="n">patchData</span><span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Mode&quot;</span><span class="p">:</span><span class="s2">&quot;Auto&quot;</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s2">&quot;boost&quot;</span><span class="p">):</span>
+            <span class="n">temp</span><span class="o">=</span><span class="n">boost_temp</span><span class="o">*</span><span class="mi">10</span>
+            <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Setting Boost Temp to {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">temp</span><span class="p">))</span>
+            <span class="n">patchData</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;RequestOverride&quot;</span><span class="p">:{</span><span class="s2">&quot;Type&quot;</span><span class="p">:</span><span class="s2">&quot;Manual&quot;</span><span class="p">,</span><span class="s2">&quot;DurationMinutes&quot;</span><span class="p">:</span> <span class="n">boost_temp_time</span><span class="p">,</span> <span class="s2">&quot;SetPoint&quot;</span><span class="p">:</span><span class="n">temp</span><span class="p">,</span> <span class="s2">&quot;Originator&quot;</span><span class="p">:</span><span class="s2">&quot;App&quot;</span><span class="p">}}</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s2">&quot;manual&quot;</span><span class="p">):</span>
+            <span class="c1"># When setting back to manual , set the temp to the scheduled temp</span>
+            <span class="n">newTemp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">getRoom</span><span class="p">(</span><span class="n">roomId</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ScheduledSetPoint&quot;</span><span class="p">)</span>
+            <span class="n">patchData</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Mode&quot;</span><span class="p">:</span> <span class="s2">&quot;Manual&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;RequestOverride&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="p">:</span> <span class="s2">&quot;Manual&quot;</span><span class="p">,</span>
+                                             <span class="s2">&quot;SetPoint&quot;</span><span class="p">:</span> <span class="n">newTemp</span><span class="p">}}</span>
+
+
+        <span class="c1"># Implement trv off as per https://github.com/asantaga/wiserheatingapi/issues/3</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s2">&quot;off&quot;</span><span class="p">):</span>
+            <span class="n">patchData</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Mode&quot;</span><span class="p">:</span> <span class="s2">&quot;Manual&quot;</span><span class="p">,</span><span class="s2">&quot;RequestOverride&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="p">:</span> <span class="s2">&quot;Manual&quot;</span><span class="p">,</span><span class="s2">&quot;SetPoint&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">200</span><span class="p">}}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error setting setting room mode, received  {} but should be auto,boost,off or manual &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
+        
+        <span class="c1"># if not a boost operation cancel any current boost</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">!=</span><span class="s2">&quot;boost&quot;</span><span class="p">):</span>
+            <span class="n">cancelBoostPostData</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;RequestOverride&quot;</span><span class="p">:{</span><span class="s2">&quot;Type&quot;</span><span class="p">:</span><span class="s2">&quot;None&quot;</span><span class="p">,</span><span class="s2">&quot;DurationMinutes&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;SetPoint&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Originator&quot;</span><span class="p">:</span><span class="s2">&quot;App&quot;</span><span class="p">}}</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">WISERROOM</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hubIP</span><span class="p">,</span><span class="n">roomId</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span><span class="n">json</span><span class="o">=</span><span class="n">cancelBoostPostData</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
+                <span class="n">_LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Cancelling boost resulted in {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error cancelling boost {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
+
+        <span class="c1"># Set new mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">WISERROOM</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hubIP</span><span class="p">,</span><span class="n">roomId</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span><span class="n">json</span><span class="o">=</span><span class="n">patchData</span><span class="p">)</span>        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">_LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Set Room mode to {} resulted in {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error setting mode to error {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
+        
+
+    
+    
+</pre></div>
+
+  </div>
+
+  </header>
+
+  <section id="section-items">
+    <h2 class="section-title" id="header-variables">Module variables</h2>
+      <div class="item">
+      <p id="wiserHub.WISERHUBURL" class="name">var <span class="ident">WISERHUBURL</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="wiserHub.WISERMODEURL" class="name">var <span class="ident">WISERMODEURL</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="wiserHub.WISERROOM" class="name">var <span class="ident">WISERROOM</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="wiserHub.WISERSETROOMTEMP" class="name">var <span class="ident">WISERSETROOMTEMP</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+
+
+    <h2 class="section-title" id="header-classes">Classes</h2>
+      
+      <div class="item">
+      <p id="wiserHub.wiserHub" class="name">class <span class="ident">wiserHub</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wiserHub.wiserHub', this);">Show source &equiv;</a></p>
+  <div id="source-wiserHub.wiserHub" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">wiserHub</span><span class="p">():</span>
+   
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">hubIP</span><span class="p">,</span><span class="n">secret</span><span class="p">):</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;WiserHub API Init&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">=</span><span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hubIP</span><span class="o">=</span><span class="n">hubIP</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hubSecret</span><span class="o">=</span><span class="n">secret</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;SECRET&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hubSecret</span><span class="p">,</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json;charset=UTF-8&#39;</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="o">=</span><span class="p">{}</span>      <span class="c1"># Dict holding Valve2Room mapping convinience variable</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>          <span class="c1"># Issue first refresh in init</span>
+        
+    <span class="k">def</span> <span class="nf">refreshData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Forces a refresh of data</span>
+<span class="sd">        return: JSON Data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">smartValves</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Updating Wiser Hub Data&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">WISERHUBURL</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hubIP</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Wiser Hub Data received {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">getRooms</span><span class="p">()</span><span class="o">!=</span><span class="bp">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getRooms</span><span class="p">():</span>
+                <span class="n">roomStatId</span><span class="o">=</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RoomStatId&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">roomStatId</span><span class="o">!=</span><span class="bp">None</span><span class="p">:</span>
+                    <span class="c1">#RoomStat found add it to the list</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="p">[</span><span class="n">roomStatId</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;roomId&quot;</span><span class="p">:</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">),</span> <span class="s2">&quot;roomName&quot;</span><span class="p">:</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">)}</span>
+                <span class="n">smartValves</span><span class="o">=</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SmartValveIds&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">smartValves</span><span class="o">!=</span><span class="bp">None</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">valveId</span> <span class="ow">in</span> <span class="n">smartValves</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="p">[</span><span class="n">valveId</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;roomId&quot;</span><span class="p">:</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">),</span> <span class="s2">&quot;roomName&quot;</span><span class="p">:</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">)}</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot; Room doesnt contain any smart valves, maybe an error/corruption?? &quot;</span><span class="p">)</span>
+            <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot; valve2roomMap{} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Wiser found no rooms&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span>
+
+        
+
+    <span class="k">def</span> <span class="nf">getHubData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the full JSON payload , for functions where I havent provided a API yet</span>
+
+<span class="sd">        returns : JSON Data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span>
+
+    <span class="k">def</span> <span class="nf">getRooms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets Room Data as JSON Payload</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Room&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">getRoom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">roomId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convinience to get data on a single room</span>
+
+<span class="sd">        param roomId: The roomID</span>
+<span class="sd">        return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Room&quot;</span><span class="p">)</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="n">_LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;getRoom called but no rooms found&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Room&quot;</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span><span class="o">==</span><span class="n">roomId</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">room</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">getSystem</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convinience function to get system information</span>
+
+<span class="sd">        return: JSON with system data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;System&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getHotwater</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convinience function to get hotwater data</span>
+
+<span class="sd">        return: JSON with hotwater data</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;HotWater&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getHeatingChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convinience function to get heating channel data</span>
+
+<span class="sd">        return: JSON data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;HeatingChannel&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getDevices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convinience function to get devices data</span>
+
+<span class="sd">        return: JSON data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Device&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getDevice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">deviceId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get single devices data</span>
+
+<span class="sd">        param deviceId:</span>
+<span class="sd">        return: Device JSON Data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Device&quot;</span><span class="p">)</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="n">_LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;getRoom called but no rooms found&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Device&quot;</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span><span class="o">==</span><span class="n">deviceId</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">device</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+
+    <span class="k">def</span> <span class="nf">getDeviceRoom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">deviceId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convinience function to return the name of a room which is associated with a device (roomstat or trf)</span>
+
+<span class="sd">        param deviceId:</span>
+<span class="sd">        return: Name of Room associated with a device ID</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot; getDeviceRoom called, valve2roomMap is {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="p">[</span><span class="n">deviceId</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">getHeatingRelayStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns heating relay status</span>
+<span class="sd">        return:  On or Off</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="n">heatingRelayStatus</span><span class="o">=</span><span class="s2">&quot;Off&quot;</span>
+        <span class="c1"># There could be multiple heating channels, </span>
+        <span class="n">heatingChannels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">getHeatingChannels</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">heatingChannel</span> <span class="ow">in</span> <span class="n">heatingChannels</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">heatingChannel</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;HeatingRelayState&quot;</span><span class="p">)</span><span class="o">==</span><span class="s2">&quot;On&quot;</span><span class="p">:</span>
+                <span class="n">heatingRelayStatus</span><span class="o">=</span><span class="s2">&quot;On&quot;</span>
+        <span class="k">return</span> <span class="n">heatingRelayStatus</span>
+    
+    <span class="k">def</span> <span class="nf">getHotwaterRelayStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         Returns hotwater relay status</span>
+<span class="sd">        return:  On or Off</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;HotWater&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;WaterHeatingState&quot;</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">getRoomStatData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">deviceId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets Roomt Thermostats Data</span>
+
+<span class="sd">        param deviceId:</span>
+<span class="sd">        return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="p">[</span><span class="s1">&#39;RoomStat&#39;</span><span class="p">]</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+                <span class="n">_LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;getRoom called but no rooms found&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">for</span> <span class="n">roomStat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="p">[</span><span class="s1">&#39;RoomStat&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">roomStat</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span><span class="o">==</span><span class="n">deviceId</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">roomStat</span>
+        <span class="k">return</span> <span class="bp">None</span> 
+
+    <span class="k">def</span> <span class="nf">setHomeAwayMode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mode</span><span class="p">,</span><span class="n">temperature</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets default Home or Away mode, optionally allows you to set a temperature for away mode</span>
+
+<span class="sd">        param mode: HOME   | AWAY</span>
+
+<span class="sd">        param temperature: Temperature between 5-30C or -20 for OFF</span>
+
+<span class="sd">        return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Setting Home/Away mode to : {} {} C&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span><span class="n">temperature</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">patchData</span><span class="o">=</span><span class="p">{}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;HOME&#39;</span><span class="p">,</span><span class="s1">&#39;AWAY&#39;</span><span class="p">]):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;setAwayHome can only be HOME or AWAY&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">mode</span><span class="o">==</span><span class="s2">&quot;AWAY&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">temperature</span><span class="o">==</span><span class="bp">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;setAwayHome set to AWAY but not temperature set&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">temperature</span><span class="o">==</span> <span class="o">-</span><span class="mi">20</span> <span class="ow">or</span> <span class="n">temperature</span> <span class="o">&lt;</span><span class="mi">0</span> <span class="ow">or</span> <span class="n">temperature</span><span class="o">&gt;</span><span class="mi">30</span><span class="p">:</span>
+              <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;setAwayHome temperature can only be between 5 and 30 or -20(Off)&quot;</span><span class="p">)</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Setting Home/Away : {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="o">*</span><span class="mi">10</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mode</span><span class="o">==</span><span class="s2">&quot;AWAY&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patchData</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;setPoint&quot;</span><span class="p">:</span><span class="n">temperature</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patchData</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;setPoint&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span> <span class="p">(</span><span class="s2">&quot;patchdata {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patchData</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">WISERMODEURL</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hubIP</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span><span class="n">json</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">patchData</span> <span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="o">!=</span><span class="mi">200</span><span class="p">):</span>
+            <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Set Home/Away Response code = {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error setting Home/Away , error {} {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+
+
+
+    <span class="k">def</span> <span class="nf">setRoomTemperature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">roomId</span><span class="p">,</span> <span class="n">temperature</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the room temperature</span>
+<span class="sd">        param roomId:  The Room ID</span>
+<span class="sd">        param temperature:  The temperature in celcius from 5 to 30, -20 for Off</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Set Room {} Temperature to = {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">roomId</span><span class="p">,</span><span class="n">temperature</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">temperature</span><span class="o">!=-</span><span class="mi">20</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">temperature</span><span class="o">&lt;</span><span class="mi">5</span> <span class="ow">or</span> <span class="n">temperature</span><span class="o">&gt;</span><span class="mi">30</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;SetRoomTemperature : value of temperature must be between 5 and 30 OR -20 (off)&quot;</span><span class="p">)</span>
+        <span class="n">apitemp</span><span class="o">=</span><span class="n">temperature</span><span class="o">*</span><span class="mi">10</span>
+        <span class="n">patchData</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;RequestOverride&quot;</span><span class="p">:{</span><span class="s2">&quot;Type&quot;</span><span class="p">:</span><span class="s2">&quot;Manual&quot;</span><span class="p">,</span><span class="s2">&quot;SetPoint&quot;</span><span class="p">:</span><span class="n">apitemp</span><span class="p">}}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">WISERSETROOMTEMP</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hubIP</span><span class="p">,</span><span class="n">roomId</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span><span class="n">json</span><span class="o">=</span><span class="n">patchData</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">_LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Set Room {} Temperature to = {} resulted in {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">roomId</span><span class="p">,</span><span class="n">temperature</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error setting temperature, error {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Set room Temp, error {} ({})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+
+
+
+
+    <span class="c1"># Set Room Mode (Manual, Boost,Off or Auto )</span>
+    <span class="c1"># If set to off then the trv goes to manual and temperature of -200</span>
+    <span class="c1">#</span>
+    <span class="k">def</span> <span class="nf">setRoomMode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">roomId</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span><span class="n">boost_temp</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">boost_temp_time</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the Room Mode, this can be Auto, Manual, off or Boost. When you set the mode back to Auto it will automatically take the scheduled temperature</span>
+
+<span class="sd">        param roomId: RoomId</span>
+
+<span class="sd">        param mode:  Mode (auto, manual off, or boost)</span>
+
+<span class="sd">        param boost_temp:  If boosting enter the temperature here in C, can be between 5-30</span>
+
+<span class="sd">        param boost_temp_time:  How long to boost for in minutes</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Set Mode {} for a room {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span><span class="n">roomId</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s2">&quot;auto&quot;</span><span class="p">):</span>
+            <span class="c1">#Do Auto</span>
+            <span class="n">patchData</span><span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Mode&quot;</span><span class="p">:</span><span class="s2">&quot;Auto&quot;</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s2">&quot;boost&quot;</span><span class="p">):</span>
+            <span class="n">temp</span><span class="o">=</span><span class="n">boost_temp</span><span class="o">*</span><span class="mi">10</span>
+            <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Setting Boost Temp to {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">temp</span><span class="p">))</span>
+            <span class="n">patchData</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;RequestOverride&quot;</span><span class="p">:{</span><span class="s2">&quot;Type&quot;</span><span class="p">:</span><span class="s2">&quot;Manual&quot;</span><span class="p">,</span><span class="s2">&quot;DurationMinutes&quot;</span><span class="p">:</span> <span class="n">boost_temp_time</span><span class="p">,</span> <span class="s2">&quot;SetPoint&quot;</span><span class="p">:</span><span class="n">temp</span><span class="p">,</span> <span class="s2">&quot;Originator&quot;</span><span class="p">:</span><span class="s2">&quot;App&quot;</span><span class="p">}}</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s2">&quot;manual&quot;</span><span class="p">):</span>
+            <span class="c1"># When setting back to manual , set the temp to the scheduled temp</span>
+            <span class="n">newTemp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">getRoom</span><span class="p">(</span><span class="n">roomId</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ScheduledSetPoint&quot;</span><span class="p">)</span>
+            <span class="n">patchData</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Mode&quot;</span><span class="p">:</span> <span class="s2">&quot;Manual&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;RequestOverride&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="p">:</span> <span class="s2">&quot;Manual&quot;</span><span class="p">,</span>
+                                             <span class="s2">&quot;SetPoint&quot;</span><span class="p">:</span> <span class="n">newTemp</span><span class="p">}}</span>
+
+
+        <span class="c1"># Implement trv off as per https://github.com/asantaga/wiserheatingapi/issues/3</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s2">&quot;off&quot;</span><span class="p">):</span>
+            <span class="n">patchData</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Mode&quot;</span><span class="p">:</span> <span class="s2">&quot;Manual&quot;</span><span class="p">,</span><span class="s2">&quot;RequestOverride&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="p">:</span> <span class="s2">&quot;Manual&quot;</span><span class="p">,</span><span class="s2">&quot;SetPoint&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">200</span><span class="p">}}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error setting setting room mode, received  {} but should be auto,boost,off or manual &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
+        
+        <span class="c1"># if not a boost operation cancel any current boost</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">!=</span><span class="s2">&quot;boost&quot;</span><span class="p">):</span>
+            <span class="n">cancelBoostPostData</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;RequestOverride&quot;</span><span class="p">:{</span><span class="s2">&quot;Type&quot;</span><span class="p">:</span><span class="s2">&quot;None&quot;</span><span class="p">,</span><span class="s2">&quot;DurationMinutes&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;SetPoint&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Originator&quot;</span><span class="p">:</span><span class="s2">&quot;App&quot;</span><span class="p">}}</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">WISERROOM</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hubIP</span><span class="p">,</span><span class="n">roomId</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span><span class="n">json</span><span class="o">=</span><span class="n">cancelBoostPostData</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
+                <span class="n">_LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Cancelling boost resulted in {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error cancelling boost {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
+
+        <span class="c1"># Set new mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">WISERROOM</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hubIP</span><span class="p">,</span><span class="n">roomId</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span><span class="n">json</span><span class="o">=</span><span class="n">patchData</span><span class="p">)</span>        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">_LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Set Room mode to {} resulted in {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error setting mode to error {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#wiserHub.wiserHub">wiserHub</a></li>
+          <li>builtins.object</li>
+          </ul>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="wiserHub.wiserHub.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, hubIP, secret)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Initialize self.  See help(type(self)) for accurate signature.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wiserHub.wiserHub.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-wiserHub.wiserHub.__init__" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">hubIP</span><span class="p">,</span><span class="n">secret</span><span class="p">):</span>
+    <span class="n">_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;WiserHub API Init&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">=</span><span class="bp">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hubIP</span><span class="o">=</span><span class="n">hubIP</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hubSecret</span><span class="o">=</span><span class="n">secret</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;SECRET&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hubSecret</span><span class="p">,</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json;charset=UTF-8&#39;</span><span class="p">}</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="o">=</span><span class="p">{}</span>      <span class="c1"># Dict holding Valve2Room mapping convinience variable</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>          <span class="c1"># Issue first refresh in init</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wiserHub.wiserHub.getDevice">
+    <p>def <span class="ident">getDevice</span>(</p><p>self, deviceId)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Get single devices data</p>
+<p>param deviceId:
+return: Device JSON Data</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wiserHub.wiserHub.getDevice', this);">Show source &equiv;</a></p>
+  <div id="source-wiserHub.wiserHub.getDevice" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">getDevice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">deviceId</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get single devices data</span>
+<span class="sd">    param deviceId:</span>
+<span class="sd">    return: Device JSON Data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Device&quot;</span><span class="p">)</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;getRoom called but no rooms found&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Device&quot;</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span><span class="o">==</span><span class="n">deviceId</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">device</span>
+    <span class="k">return</span> <span class="bp">None</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wiserHub.wiserHub.getDeviceRoom">
+    <p>def <span class="ident">getDeviceRoom</span>(</p><p>self, deviceId)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Convinience function to return the name of a room which is associated with a device (roomstat or trf)</p>
+<p>param deviceId:
+return: Name of Room associated with a device ID</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wiserHub.wiserHub.getDeviceRoom', this);">Show source &equiv;</a></p>
+  <div id="source-wiserHub.wiserHub.getDeviceRoom" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">getDeviceRoom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">deviceId</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convinience function to return the name of a room which is associated with a device (roomstat or trf)</span>
+<span class="sd">    param deviceId:</span>
+<span class="sd">    return: Name of Room associated with a device ID</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot; getDeviceRoom called, valve2roomMap is {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="p">[</span><span class="n">deviceId</span><span class="p">]</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wiserHub.wiserHub.getDevices">
+    <p>def <span class="ident">getDevices</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Convinience function to get devices data</p>
+<p>return: JSON data</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wiserHub.wiserHub.getDevices', this);">Show source &equiv;</a></p>
+  <div id="source-wiserHub.wiserHub.getDevices" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">getDevices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convinience function to get devices data</span>
+<span class="sd">    return: JSON data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Device&quot;</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wiserHub.wiserHub.getHeatingChannels">
+    <p>def <span class="ident">getHeatingChannels</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Convinience function to get heating channel data</p>
+<p>return: JSON data</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wiserHub.wiserHub.getHeatingChannels', this);">Show source &equiv;</a></p>
+  <div id="source-wiserHub.wiserHub.getHeatingChannels" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">getHeatingChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convinience function to get heating channel data</span>
+<span class="sd">    return: JSON data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;HeatingChannel&quot;</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wiserHub.wiserHub.getHeatingRelayStatus">
+    <p>def <span class="ident">getHeatingRelayStatus</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Returns heating relay status
+return:  On or Off</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wiserHub.wiserHub.getHeatingRelayStatus', this);">Show source &equiv;</a></p>
+  <div id="source-wiserHub.wiserHub.getHeatingRelayStatus" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">getHeatingRelayStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns heating relay status</span>
+<span class="sd">    return:  On or Off</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+    <span class="n">heatingRelayStatus</span><span class="o">=</span><span class="s2">&quot;Off&quot;</span>
+    <span class="c1"># There could be multiple heating channels, </span>
+    <span class="n">heatingChannels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">getHeatingChannels</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">heatingChannel</span> <span class="ow">in</span> <span class="n">heatingChannels</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">heatingChannel</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;HeatingRelayState&quot;</span><span class="p">)</span><span class="o">==</span><span class="s2">&quot;On&quot;</span><span class="p">:</span>
+            <span class="n">heatingRelayStatus</span><span class="o">=</span><span class="s2">&quot;On&quot;</span>
+    <span class="k">return</span> <span class="n">heatingRelayStatus</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wiserHub.wiserHub.getHotwater">
+    <p>def <span class="ident">getHotwater</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Convinience function to get hotwater data</p>
+<p>return: JSON with hotwater data</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wiserHub.wiserHub.getHotwater', this);">Show source &equiv;</a></p>
+  <div id="source-wiserHub.wiserHub.getHotwater" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">getHotwater</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convinience function to get hotwater data</span>
+<span class="sd">    return: JSON with hotwater data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;HotWater&quot;</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wiserHub.wiserHub.getHotwaterRelayStatus">
+    <p>def <span class="ident">getHotwaterRelayStatus</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Returns hotwater relay status
+return:  On or Off</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wiserHub.wiserHub.getHotwaterRelayStatus', this);">Show source &equiv;</a></p>
+  <div id="source-wiserHub.wiserHub.getHotwaterRelayStatus" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">getHotwaterRelayStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     Returns hotwater relay status</span>
+<span class="sd">    return:  On or Off</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;HotWater&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;WaterHeatingState&quot;</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wiserHub.wiserHub.getHubData">
+    <p>def <span class="ident">getHubData</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Retrieves the full JSON payload , for functions where I havent provided a API yet</p>
+<p>returns : JSON Data</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wiserHub.wiserHub.getHubData', this);">Show source &equiv;</a></p>
+  <div id="source-wiserHub.wiserHub.getHubData" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">getHubData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieves the full JSON payload , for functions where I havent provided a API yet</span>
+<span class="sd">    returns : JSON Data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wiserHub.wiserHub.getRoom">
+    <p>def <span class="ident">getRoom</span>(</p><p>self, roomId)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Convinience to get data on a single room</p>
+<p>param roomId: The roomID
+return:</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wiserHub.wiserHub.getRoom', this);">Show source &equiv;</a></p>
+  <div id="source-wiserHub.wiserHub.getRoom" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">getRoom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">roomId</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convinience to get data on a single room</span>
+<span class="sd">    param roomId: The roomID</span>
+<span class="sd">    return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Room&quot;</span><span class="p">)</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;getRoom called but no rooms found&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Room&quot;</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span><span class="o">==</span><span class="n">roomId</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">room</span>
+    <span class="k">return</span> <span class="bp">None</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wiserHub.wiserHub.getRoomStatData">
+    <p>def <span class="ident">getRoomStatData</span>(</p><p>self, deviceId)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Gets Roomt Thermostats Data</p>
+<p>param deviceId:
+return:</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wiserHub.wiserHub.getRoomStatData', this);">Show source &equiv;</a></p>
+  <div id="source-wiserHub.wiserHub.getRoomStatData" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">getRoomStatData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">deviceId</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gets Roomt Thermostats Data</span>
+<span class="sd">    param deviceId:</span>
+<span class="sd">    return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="p">[</span><span class="s1">&#39;RoomStat&#39;</span><span class="p">]</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+            <span class="n">_LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;getRoom called but no rooms found&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">for</span> <span class="n">roomStat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="p">[</span><span class="s1">&#39;RoomStat&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">roomStat</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span><span class="o">==</span><span class="n">deviceId</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">roomStat</span>
+    <span class="k">return</span> <span class="bp">None</span> 
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wiserHub.wiserHub.getRooms">
+    <p>def <span class="ident">getRooms</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Gets Room Data as JSON Payload</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wiserHub.wiserHub.getRooms', this);">Show source &equiv;</a></p>
+  <div id="source-wiserHub.wiserHub.getRooms" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">getRooms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gets Room Data as JSON Payload</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Room&quot;</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wiserHub.wiserHub.getSystem">
+    <p>def <span class="ident">getSystem</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Convinience function to get system information</p>
+<p>return: JSON with system data</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wiserHub.wiserHub.getSystem', this);">Show source &equiv;</a></p>
+  <div id="source-wiserHub.wiserHub.getSystem" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">getSystem</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convinience function to get system information</span>
+<span class="sd">    return: JSON with system data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refreshData</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;System&quot;</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wiserHub.wiserHub.refreshData">
+    <p>def <span class="ident">refreshData</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Forces a refresh of data
+return: JSON Data</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wiserHub.wiserHub.refreshData', this);">Show source &equiv;</a></p>
+  <div id="source-wiserHub.wiserHub.refreshData" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">refreshData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Forces a refresh of data</span>
+<span class="sd">    return: JSON Data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">smartValves</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Updating Wiser Hub Data&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">WISERHUBURL</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hubIP</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Wiser Hub Data received {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span><span class="p">))</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">getRooms</span><span class="p">()</span><span class="o">!=</span><span class="bp">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">room</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getRooms</span><span class="p">():</span>
+            <span class="n">roomStatId</span><span class="o">=</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RoomStatId&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">roomStatId</span><span class="o">!=</span><span class="bp">None</span><span class="p">:</span>
+                <span class="c1">#RoomStat found add it to the list</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="p">[</span><span class="n">roomStatId</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;roomId&quot;</span><span class="p">:</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">),</span> <span class="s2">&quot;roomName&quot;</span><span class="p">:</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">)}</span>
+            <span class="n">smartValves</span><span class="o">=</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SmartValveIds&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">smartValves</span><span class="o">!=</span><span class="bp">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">valveId</span> <span class="ow">in</span> <span class="n">smartValves</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="p">[</span><span class="n">valveId</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;roomId&quot;</span><span class="p">:</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">),</span> <span class="s2">&quot;roomName&quot;</span><span class="p">:</span><span class="n">room</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">)}</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">_LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot; Room doesnt contain any smart valves, maybe an error/corruption?? &quot;</span><span class="p">)</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot; valve2roomMap{} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device2roomMap</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Wiser found no rooms&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wiserHubData</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wiserHub.wiserHub.setHomeAwayMode">
+    <p>def <span class="ident">setHomeAwayMode</span>(</p><p>self, mode, temperature=10)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Sets default Home or Away mode, optionally allows you to set a temperature for away mode</p>
+<p>param mode: HOME   | AWAY</p>
+<p>param temperature: Temperature between 5-30C or -20 for OFF</p>
+<p>return:</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wiserHub.wiserHub.setHomeAwayMode', this);">Show source &equiv;</a></p>
+  <div id="source-wiserHub.wiserHub.setHomeAwayMode" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">setHomeAwayMode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mode</span><span class="p">,</span><span class="n">temperature</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sets default Home or Away mode, optionally allows you to set a temperature for away mode</span>
+<span class="sd">    param mode: HOME   | AWAY</span>
+<span class="sd">    param temperature: Temperature between 5-30C or -20 for OFF</span>
+<span class="sd">    return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Setting Home/Away mode to : {} {} C&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span><span class="n">temperature</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">patchData</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;HOME&#39;</span><span class="p">,</span><span class="s1">&#39;AWAY&#39;</span><span class="p">]):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;setAwayHome can only be HOME or AWAY&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">mode</span><span class="o">==</span><span class="s2">&quot;AWAY&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">temperature</span><span class="o">==</span><span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;setAwayHome set to AWAY but not temperature set&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">temperature</span><span class="o">==</span> <span class="o">-</span><span class="mi">20</span> <span class="ow">or</span> <span class="n">temperature</span> <span class="o">&lt;</span><span class="mi">0</span> <span class="ow">or</span> <span class="n">temperature</span><span class="o">&gt;</span><span class="mi">30</span><span class="p">:</span>
+          <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;setAwayHome temperature can only be between 5 and 30 or -20(Off)&quot;</span><span class="p">)</span>
+    <span class="n">_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Setting Home/Away : {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="o">*</span><span class="mi">10</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">mode</span><span class="o">==</span><span class="s2">&quot;AWAY&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">patchData</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;setPoint&quot;</span><span class="p">:</span><span class="n">temperature</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">patchData</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;setPoint&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>
+    <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span> <span class="p">(</span><span class="s2">&quot;patchdata {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patchData</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">WISERMODEURL</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hubIP</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span><span class="n">json</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">patchData</span> <span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="o">!=</span><span class="mi">200</span><span class="p">):</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Set Home/Away Response code = {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error setting Home/Away , error {} {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wiserHub.wiserHub.setRoomMode">
+    <p>def <span class="ident">setRoomMode</span>(</p><p>self, roomId, mode, boost_temp=20, boost_temp_time=30)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Set the Room Mode, this can be Auto, Manual, off or Boost. When you set the mode back to Auto it will automatically take the scheduled temperature</p>
+<p>param roomId: RoomId</p>
+<p>param mode:  Mode (auto, manual off, or boost)</p>
+<p>param boost_temp:  If boosting enter the temperature here in C, can be between 5-30</p>
+<p>param boost_temp_time:  How long to boost for in minutes</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wiserHub.wiserHub.setRoomMode', this);">Show source &equiv;</a></p>
+  <div id="source-wiserHub.wiserHub.setRoomMode" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">setRoomMode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">roomId</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span><span class="n">boost_temp</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">boost_temp_time</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set the Room Mode, this can be Auto, Manual, off or Boost. When you set the mode back to Auto it will automatically take the scheduled temperature</span>
+<span class="sd">    param roomId: RoomId</span>
+<span class="sd">    param mode:  Mode (auto, manual off, or boost)</span>
+<span class="sd">    param boost_temp:  If boosting enter the temperature here in C, can be between 5-30</span>
+<span class="sd">    param boost_temp_time:  How long to boost for in minutes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># TODO</span>
+    <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Set Mode {} for a room {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span><span class="n">roomId</span><span class="p">))</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s2">&quot;auto&quot;</span><span class="p">):</span>
+        <span class="c1">#Do Auto</span>
+        <span class="n">patchData</span><span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Mode&quot;</span><span class="p">:</span><span class="s2">&quot;Auto&quot;</span><span class="p">}</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s2">&quot;boost&quot;</span><span class="p">):</span>
+        <span class="n">temp</span><span class="o">=</span><span class="n">boost_temp</span><span class="o">*</span><span class="mi">10</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Setting Boost Temp to {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">temp</span><span class="p">))</span>
+        <span class="n">patchData</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;RequestOverride&quot;</span><span class="p">:{</span><span class="s2">&quot;Type&quot;</span><span class="p">:</span><span class="s2">&quot;Manual&quot;</span><span class="p">,</span><span class="s2">&quot;DurationMinutes&quot;</span><span class="p">:</span> <span class="n">boost_temp_time</span><span class="p">,</span> <span class="s2">&quot;SetPoint&quot;</span><span class="p">:</span><span class="n">temp</span><span class="p">,</span> <span class="s2">&quot;Originator&quot;</span><span class="p">:</span><span class="s2">&quot;App&quot;</span><span class="p">}}</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s2">&quot;manual&quot;</span><span class="p">):</span>
+        <span class="c1"># When setting back to manual , set the temp to the scheduled temp</span>
+        <span class="n">newTemp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">getRoom</span><span class="p">(</span><span class="n">roomId</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ScheduledSetPoint&quot;</span><span class="p">)</span>
+        <span class="n">patchData</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Mode&quot;</span><span class="p">:</span> <span class="s2">&quot;Manual&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;RequestOverride&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="p">:</span> <span class="s2">&quot;Manual&quot;</span><span class="p">,</span>
+                                         <span class="s2">&quot;SetPoint&quot;</span><span class="p">:</span> <span class="n">newTemp</span><span class="p">}}</span>
+    <span class="c1"># Implement trv off as per https://github.com/asantaga/wiserheatingapi/issues/3</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s2">&quot;off&quot;</span><span class="p">):</span>
+        <span class="n">patchData</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Mode&quot;</span><span class="p">:</span> <span class="s2">&quot;Manual&quot;</span><span class="p">,</span><span class="s2">&quot;RequestOverride&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="p">:</span> <span class="s2">&quot;Manual&quot;</span><span class="p">,</span><span class="s2">&quot;SetPoint&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">200</span><span class="p">}}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error setting setting room mode, received  {} but should be auto,boost,off or manual &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
+    
+    <span class="c1"># if not a boost operation cancel any current boost</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">!=</span><span class="s2">&quot;boost&quot;</span><span class="p">):</span>
+        <span class="n">cancelBoostPostData</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;RequestOverride&quot;</span><span class="p">:{</span><span class="s2">&quot;Type&quot;</span><span class="p">:</span><span class="s2">&quot;None&quot;</span><span class="p">,</span><span class="s2">&quot;DurationMinutes&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;SetPoint&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Originator&quot;</span><span class="p">:</span><span class="s2">&quot;App&quot;</span><span class="p">}}</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">WISERROOM</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hubIP</span><span class="p">,</span><span class="n">roomId</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span><span class="n">json</span><span class="o">=</span><span class="n">cancelBoostPostData</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
+            <span class="n">_LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Cancelling boost resulted in {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error cancelling boost {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
+    <span class="c1"># Set new mode</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">WISERROOM</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hubIP</span><span class="p">,</span><span class="n">roomId</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span><span class="n">json</span><span class="o">=</span><span class="n">patchData</span><span class="p">)</span>        
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Set Room mode to {} resulted in {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error setting mode to error {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wiserHub.wiserHub.setRoomTemperature">
+    <p>def <span class="ident">setRoomTemperature</span>(</p><p>self, roomId, temperature)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Sets the room temperature
+param roomId:  The Room ID
+param temperature:  The temperature in celcius from 5 to 30, -20 for Off</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wiserHub.wiserHub.setRoomTemperature', this);">Show source &equiv;</a></p>
+  <div id="source-wiserHub.wiserHub.setRoomTemperature" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">setRoomTemperature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">roomId</span><span class="p">,</span> <span class="n">temperature</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sets the room temperature</span>
+<span class="sd">    param roomId:  The Room ID</span>
+<span class="sd">    param temperature:  The temperature in celcius from 5 to 30, -20 for Off</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Set Room {} Temperature to = {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">roomId</span><span class="p">,</span><span class="n">temperature</span><span class="p">))</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">temperature</span><span class="o">!=-</span><span class="mi">20</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">temperature</span><span class="o">&lt;</span><span class="mi">5</span> <span class="ow">or</span> <span class="n">temperature</span><span class="o">&gt;</span><span class="mi">30</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;SetRoomTemperature : value of temperature must be between 5 and 30 OR -20 (off)&quot;</span><span class="p">)</span>
+    <span class="n">apitemp</span><span class="o">=</span><span class="n">temperature</span><span class="o">*</span><span class="mi">10</span>
+    <span class="n">patchData</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;RequestOverride&quot;</span><span class="p">:{</span><span class="s2">&quot;Type&quot;</span><span class="p">:</span><span class="s2">&quot;Manual&quot;</span><span class="p">,</span><span class="s2">&quot;SetPoint&quot;</span><span class="p">:</span><span class="n">apitemp</span><span class="p">}}</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">WISERSETROOMTEMP</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hubIP</span><span class="p">,</span><span class="n">roomId</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span><span class="n">json</span><span class="o">=</span><span class="n">patchData</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+        <span class="n">_LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Set Room {} Temperature to = {} resulted in {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">roomId</span><span class="p">,</span><span class="n">temperature</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Error setting temperature, error {} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+    <span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Set room Temp, error {} ({})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="wiserHub.wiserHub.device2roomMap" class="name">var <span class="ident">device2roomMap</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="wiserHub.wiserHub.headers" class="name">var <span class="ident">headers</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="wiserHub.wiserHub.hubIP" class="name">var <span class="ident">hubIP</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="wiserHub.wiserHub.hubSecret" class="name">var <span class="ident">hubSecret</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="wiserHub.wiserHub.wiserHubData" class="name">var <span class="ident">wiserHubData</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+      </div>
+      </div>
+
+  </section>
+
+    </article>
+  <div class="clear"> </div>
+  <footer id="footer">
+    <p>
+      Documentation generated by
+      <a href="https://github.com/BurntSushi/pdoc">pdoc 0.3.2</a>
+    </p>
+
+    <p>pdoc is in the public domain with the
+      <a href="http://unlicense.org">UNLICENSE</a></p>
+
+    <p>Design by <a href="http://nadh.in">Kailash Nadh</a></p>
+  </footer>
+</div>
+</body>
+</html>

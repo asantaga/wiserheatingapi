@@ -53,16 +53,16 @@ try:
 # Other Examples
 # Setting HOME Mode , change to AWAY for away mode
 #    wh.setHomeAwayMode("HOME")
-#    wh.setHomeAwayMode("AWAY",200)
+#    wh.setHomeAwayMode("AWAY",10)
 # Set room 4 TRVs to off, which is -200
 #    print( wh.getRoom(4).get("Name"))
 #    wh.setRoomMode(4,"off")
 # Set room 4 TRVs to manual, setting normal scheduled temp
 #    wh.setRoomMode(4,"manual")
 # Set temperature of room 4 to 13C
-#    wh.setRoomTemperature(4,130)
-# Set TRV off in room 4 to 13C
-#    wh.setRoomTemperature(4,-200)
+    wh.setRoomTemperature(4,10)
+# Set TRV off in room 4 to Off
+#    wh.setRoomTemperature(4,-20)
 
 except json.decoder.JSONDecodeError as ex:
     print("JSON Exception")

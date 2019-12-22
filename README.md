@@ -1,4 +1,4 @@
-# Drayton Wiser Hub API v 1.0.2.1
+# Drayton Wiser Hub API v 1.0.2.2
 
 This repository contains a simple API which queries the Drayton Wiser Heating sysystem used in the UK.
 
@@ -42,8 +42,11 @@ wiserip=192.168.0.22
 ## 5. Run the sample
 To help understand the api simply look at the sample code ```wiserapitest.py``` and the fully commented code. 
 
+## 6. Documentation
 
+Documentation available in apidocs.html and within comments in the code
 
 Changes
 1.0.2.1 :  Added ability to turn trvs off and then back on by using setRoomMode
            Fixed bug in setRoomTemperature that wasnt checking the ranges properly
+1.0.2.2 :  Changed temperature variables to be the real variable, and internally *10 
