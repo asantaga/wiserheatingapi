@@ -1,18 +1,24 @@
 """
-Wiser API Facade
+# Wiser API Facade
 
-Currently embedded in the Home Assistant API but will be split into PyPi
-
-https://github.com/asantaga/wiserHomeAssistantPlatform
 Angelosantagata@gmail.com
 
+
+https://github.com/asantaga/wiserheatingapi
+
+
+This API Facade allows you to communicate with your wiserhub. This API is used by the homeassistant integration available at  https://github.com/asantaga/wiserHomeAssistantPlatform
 """
 
 import logging
 import requests
 
 _LOGGER = logging.getLogger(__name__)
-WISERHUBURL = "http://{}/data/domain/"
+
+"""
+Wiser Data URLS
+"""
+WISERHUBURL = "http://{}/data/domain/"    # SSSS
 WISERMODEURL= "http://{}/data/domain/System/RequestOverride"
 WISERSETROOMTEMP= "http://{}//data/domain/Room/{}"
 WISERROOM="http://{}//data/domain/Room/{}"
@@ -31,6 +37,10 @@ class wiserHub():
         self.refreshData()          # Issue first refresh in init
         
     def refreshData(self):
+        """
+        Forces a refresh of data
+        return: JSON Data
+        """
         smartValves=[]
         _LOGGER.info("Updating Wiser Hub Data")
         self.wiserHubData = requests.get(WISERHUBURL.format(
@@ -54,18 +64,31 @@ class wiserHub():
         return self.wiserHubData
 
         
-    """
-    retrieves the full JSON payload , for functions where I havent provided a API yet
-    """
+
     def getHubData(self):
+        """
+        Retrieves the full JSON payload , for functions where I havent provided a API yet
+
+        returns : JSON Data
+        """
         if (self.wiserHubData==None):
             self.refreshData()
         return self.wiserHubData
+
     def getRooms(self):
+        """
+        Gets Room Data as JSON Payload
+        """
         if (self.wiserHubData==None):
             self.refreshData()
         return self.wiserHubData.get("Room")
     def getRoom(self,roomId):
+        """
+        Convinience to get data on a single room
+
+        param roomId: The roomID
+        return:
+        """
         if (self.wiserHubData==None):
             self.refreshData()
         if (self.wiserHubData.get("Room")==None):
@@ -75,27 +98,55 @@ class wiserHub():
             if (room.get("id")==roomId):
                 return room
         return None
+
     def getSystem(self):
+        """
+        Convinience function to get system information
+
+        return: JSON with system data
+        """
         if (self.wiserHubData==None):
             self.refreshData()
         return self.wiserHubData.get("System")
 
     def getHotwater(self):
+        """
+        Convinience function to get hotwater data
+
+        return: JSON with hotwater data
+
+        """
         if (self.wiserHubData==None):
             self.refreshData()
         return self.wiserHubData.get("HotWater")
 
     def getHeatingChannels(self):
+        """
+        Convinience function to get heating channel data
+
+        return: JSON data
+        """
         if (self.wiserHubData==None):
             self.refreshData()
         return self.wiserHubData.get("HeatingChannel")
 
     def getDevices(self):
+        """
+        Convinience function to get devices data
+
+        return: JSON data
+        """
         if (self.wiserHubData==None):
             self.refreshData()
         return self.wiserHubData.get("Device")
 
     def getDevice(self,deviceId):
+        """
+        Get single devices data
+
+        param deviceId:
+        return: Device JSON Data
+        """
         if (self.wiserHubData==None):
             self.refreshData()
         if (self.wiserHubData.get("Device")==None):
@@ -106,18 +157,25 @@ class wiserHub():
                 return device
         return None
 
-    """
-    Convinience function to return the name of a room which is associated with a device (roomstat or trf)
-    """
-    def getDeviceRoom(self,deviceId):
 
+    def getDeviceRoom(self,deviceId):
+        """
+        Convinience function to return the name of a room which is associated with a device (roomstat or trf)
+
+        param deviceId:
+        return: Name of Room associated with a device ID
+
+        """
         _LOGGER.debug(" getDeviceRoom called, valve2roomMap is {} ".format(self.device2roomMap))
         if not self.device2roomMap:
             self.refreshData()
         return self.device2roomMap[deviceId]
 
-    # Get hot water status (On/Off)
     def getHeatingRelayStatus(self):
+        """
+        Returns heating relay status
+        return:  On or Off
+        """
         if (self.wiserHubData==None):
             self.refreshData()
         heatingRelayStatus="Off"
@@ -128,15 +186,24 @@ class wiserHub():
                 heatingRelayStatus="On"
         return heatingRelayStatus
     
-    # Get hot water status (On/Off)
     def getHotwaterRelayStatus(self):
+        """
+         Returns hotwater relay status
+        return:  On or Off
+
+        """
 
         if (self.wiserHubData==None):
             self.refreshData()
         return self.wiserHubData.get("HotWater")[0].get("WaterHeatingState")
     
-    # Get specific  dataSet for a roomStat
     def getRoomStatData(self,deviceId):
+        """
+        Gets Roomt Thermostats Data
+
+        param deviceId:
+        return:
+        """
         if (self.wiserHubData==None):
             self.refreshData()
         if (self.wiserHubData['RoomStat']==None):
@@ -147,17 +214,29 @@ class wiserHub():
                 return roomStat
         return None 
 
-    # Set HomeAwayMode
-    # Default temp is 100 which is 10C
-    def setHomeAwayMode(self,mode,temperature=100):
-        _LOGGER.info("Setting Home/Away mode to : {} {} C".format(mode,temperature/100))
+    def setHomeAwayMode(self,mode,temperature=10):
+        """
+        Sets default Home or Away mode, optionally allows you to set a temperature for away mode
+
+        param mode: HOME   | AWAY
+
+        param temperature: Temperature between 5-30C or -20 for OFF
+
+        return:
+        """
+        _LOGGER.info("Setting Home/Away mode to : {} {} C".format(mode,temperature))
         self.response=""
         self.patchData={}
         if (mode not in ['HOME','AWAY']):
             raise Exception("setAwayHome can only be HOME or AWAY")
-        if (mode=="AWAY" and temperature!=None and (temperature <0 or temperature>400)):
-              raise Exception("setAwayHome temperature can only be between 0 and 400 (100=10C)")
-        print("Setting Home/Away : {}".format(mode))
+
+        if (mode=="AWAY"):
+            if temperature==None:
+                raise Exception("setAwayHome set to AWAY but not temperature set")
+            if temperature== -20 or temperature <0 or temperature>30:
+              raise Exception("setAwayHome temperature can only be between 5 and 30 or -20(Off)")
+        _LOGGER.info("Setting Home/Away : {}".format(mode))
+        temperature=temperature*10
         if (mode=="AWAY"):
             self.patchData={"type":2,"setPoint":temperature}
         else:
@@ -169,16 +248,17 @@ class wiserHub():
             raise Exception("Error setting Home/Away , error {} {}".format(self.response.status_code, self.response.text))
 
 
-    # Set Room Temperature
-    # Sets room temperature. Valid values are from 50 to 300 (5C-30C) and -200 being off
-    #
-    def setRoomTemperature(self, roomId, temperature):
-        _LOGGER.info("Set Room {} Temperature to = {} ".format(roomId,temperature))
-        if ((temperature!=-200) and (temperature<50 or temperature>300)):
-            raise Exception("SetRoomTemperature : value of temperature must be between 50 and 300 OR -200(off)")
 
-        # the temp needs to be a whole number, so e.g. 19.5 -> 195
-        apitemp = (str(temperature)).replace('.', '')
+    def setRoomTemperature(self, roomId, temperature):
+        """
+        Sets the room temperature
+        param roomId:  The Room ID
+        param temperature:  The temperature in celcius from 5 to 30, -20 for Off
+        """
+        _LOGGER.info("Set Room {} Temperature to = {} ".format(roomId,temperature))
+        if ((temperature!=-20) and (temperature<5 or temperature>30)):
+            raise Exception("SetRoomTemperature : value of temperature must be between 5 and 30 OR -20 (off)")
+        apitemp=temperature*10
         patchData={"RequestOverride":{"Type":"Manual","SetPoint":apitemp}}
         self.response = requests.patch(WISERSETROOMTEMP.format(
             self.hubIP,roomId), headers=self.headers,json=patchData)
@@ -195,6 +275,18 @@ class wiserHub():
     # If set to off then the trv goes to manual and temperature of -200
     #
     def setRoomMode(self,roomId, mode,boost_temp=20,boost_temp_time=30):
+        """
+        Set the Room Mode, this can be Auto, Manual, off or Boost. When you set the mode back to Auto it will automatically take the scheduled temperature
+
+        param roomId: RoomId
+
+        param mode:  Mode (auto, manual off, or boost)
+
+        param boost_temp:  If boosting enter the temperature here in C, can be between 5-30
+
+        param boost_temp_time:  How long to boost for in minutes
+
+        """
         # TODO
         _LOGGER.debug("Set Mode {} for a room {} ".format(mode,roomId))
         if (mode.lower()=="auto"):
