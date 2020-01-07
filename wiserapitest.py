@@ -28,7 +28,7 @@ try:
     # wh.refreshdata()
     # print("itrv 8 is in room {}".format(wh.getDeviceRoom(8)['roomName']))
     # Heating State
-    print ("Hot water status {} ".format(wh.getHeatingRelayStatus()))
+    print ("Hot water status {} ".format(wh.getHotwaterRelayStatus()))
     print ("Roomstat humidity {}".format(wh.getRoomStatData(1).get("MeasuredHumidity")))
 
     print("--------------------------------")
