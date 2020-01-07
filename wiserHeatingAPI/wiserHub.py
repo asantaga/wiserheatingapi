@@ -25,7 +25,6 @@ WISERROOM="http://{}//data/domain/Room/{}"
 
 
 class wiserHub():
-   
 
     def __init__(self,hubIP,secret):
         _LOGGER.info("WiserHub API Init")
@@ -35,7 +34,7 @@ class wiserHub():
         self.headers = {'SECRET': self.hubSecret,'Content-Type': 'application/json;charset=UTF-8'}
         self.device2roomMap={}      # Dict holding Valve2Room mapping convinience variable
         self.refreshData()          # Issue first refresh in init
-        
+
     def refreshData(self):
         """
         Forces a refresh of data
@@ -62,8 +61,6 @@ class wiserHub():
         else:
             _LOGGER.warning("Wiser found no rooms")
         return self.wiserHubData
-
-        
 
     def getHubData(self):
         """
@@ -157,7 +154,6 @@ class wiserHub():
                 return device
         return None
 
-
     def getDeviceRoom(self,deviceId):
         """
         Convinience function to return the name of a room which is associated with a device (roomstat or trf)
@@ -185,7 +181,7 @@ class wiserHub():
             if heatingChannel.get("HeatingRelayState")=="On":
                 heatingRelayStatus="On"
         return heatingRelayStatus
-    
+
     def getHotwaterRelayStatus(self):
         """
          Returns hotwater relay status
@@ -233,7 +229,6 @@ class wiserHub():
 
         return True
 
-    
     def getRoomStatData(self,deviceId):
         """
         Gets Roomt Thermostats Data
@@ -249,7 +244,7 @@ class wiserHub():
         for roomStat in self.wiserHubData['RoomStat']:
             if roomStat.get("id")==deviceId:
                 return roomStat
-        return None 
+        return None
 
     def setHomeAwayMode(self,mode,temperature=10):
         """
@@ -284,8 +279,6 @@ class wiserHub():
             _LOGGER.debug("Set Home/Away Response code = {}".format(self.response.status_code))
             raise Exception("Error setting Home/Away , error {} {}".format(self.response.status_code, self.response.text))
 
-
-
     def setRoomTemperature(self, roomId, temperature):
         """
         Sets the room temperature
@@ -299,13 +292,11 @@ class wiserHub():
         patchData={"RequestOverride":{"Type":"Manual","SetPoint":apitemp}}
         self.response = requests.patch(WISERSETROOMTEMP.format(
             self.hubIP,roomId), headers=self.headers,json=patchData)
-        
+
         if self.response.status_code != 200:
             _LOGGER.error("Set Room {} Temperature to = {} resulted in {}".format(roomId,temperature,self.response.status_code))
             raise Exception("Error setting temperature, error {} ".format(self.response.text))
         _LOGGER.debug("Set room Temp, error {} ({})".format(self.response.status_code, self.response.text))
-
-
 
 
     # Set Room Mode (Manual, Boost,Off or Auto )
@@ -346,11 +337,11 @@ class wiserHub():
             patchData = {"Mode": "Manual","RequestOverride": {"Type": "Manual","SetPoint": -200}}
         else:
             raise Exception("Error setting setting room mode, received  {} but should be auto,boost,off or manual ".format(mode))
-        
+
         # if not a boost operation cancel any current boost
         if (mode.lower()!="boost"):
             cancelBoostPostData={"RequestOverride":{"Type":"None","DurationMinutes": 0, "SetPoint":0, "Originator":"App"}}
-            
+
             self.response = requests.patch(WISERROOM.format(self.hubIP,roomId), headers=self.headers,json=cancelBoostPostData)
             if (self.response.status_code != 200):
                 _LOGGER.error("Cancelling boost resulted in {}".format(self.response.status_code))
@@ -358,12 +349,7 @@ class wiserHub():
 
         # Set new mode
         self.response = requests.patch(WISERROOM.format(
-            self.hubIP,roomId), headers=self.headers,json=patchData)        
+            self.hubIP,roomId), headers=self.headers,json=patchData)
         if self.response.status_code != 200:
             _LOGGER.error("Set Room mode to {} resulted in {}".format(mode,self.response.status_code))
             raise Exception("Error setting mode to error {} ".format(mode))
-        
-
-    
-    
-
