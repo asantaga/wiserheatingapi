@@ -36,7 +36,7 @@ Create a file called wiserkeys.params and place two lines, one with the wiser IP
 e.g.
 ```
 wiserkey=ABCDCDCDCCCDCDC
-wiserip=192.168.0.22
+wiserhubip=192.168.0.22
 ```
 
 ## 5. Run the sample
