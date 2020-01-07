@@ -196,6 +196,43 @@ class wiserHub():
         if (self.wiserHubData==None):
             self.refreshData()
         return self.wiserHubData.get("HotWater")[0].get("WaterHeatingState")
+
+    def setHotwaterMode(self, mode):
+        """
+          Switch Hot Water on or off manually, or reset to 'Auto' (schedule).
+
+          'mode' can be "on", "off" or "auto".
+        """
+
+        # Wiser requires a temperature when patching the Hot Water state,
+        # reflecting 'on' or 'off'
+        DHWOnTemp  = 1100
+        DHWOffTemp = -200
+
+        modeMapping = {
+          'on':   {"RequestOverride":{"Type":"Manual", "SetPoint": DHWOnTemp}},
+          'off':  {"RequestOverride":{"Type":"Manual", "SetPoint": DHWOffTemp}},
+          'auto': {"RequestOverride":{"Type":"None", "Mode": "Auto"}},
+        }
+
+        _mode = mode.lower()
+        if _mode not in ['on', 'off', 'auto']:
+          raise Exception("Hot Water can be either 'on', 'off' or 'auto' - not '%s'" % _mode)
+
+        # Obtain our DHW control ID
+        if (self.wiserHubData==None):
+            self.refreshData()
+        DHWId = self.wiserHubData.get("HotWater")[0].get("id")
+
+        _url = WISERHUBURL.format(self.hubIP) + "/HotWater/{}/".format(DHWId)
+        _LOGGER.debug ("Sending Patch Data: {}, to URL [{}]".format(modeMapping.get(_mode), _url))
+        self.response = requests.patch(url=_url, headers=self.headers, json=modeMapping.get(_mode))
+        if (self.response.status_code!=200):
+            _LOGGER.debug("Set DHW Response code = {}".format(self.response.status_code))
+            raise Exception("Error setting hot water mode to {}, error {} {}".format(_mode, self.response.status_code, self.response.text))
+
+        return True
+
     
     def getRoomStatData(self,deviceId):
         """
