@@ -23,7 +23,12 @@ WISERMODEURL= "http://{}/data/domain/System/RequestOverride"
 WISERSETROOMTEMP= "http://{}//data/domain/Room/{}"
 WISERROOM="http://{}//data/domain/Room/{}"
 
+TEMP_MINIMUM = 5
+TEMP_MAXIMUM = 30
+TEMP_OFF = -20
+
 TIMEOUT=10
+
 
 class wiserHub():
    
@@ -37,6 +42,35 @@ class wiserHub():
         self.device2roomMap={}      # Dict holding Valve2Room mapping convinience variable
         self.refreshData()          # Issue first refresh in init
         
+    def __toWiserTemp(self,temp):
+        """
+        Converts from temperature to wiser hub format
+        param temp: The temperature to convert
+        return: Integer
+        """
+        temp = int(temp*10)
+        return temp
+        
+    def __fromWiserTemp(self,temp):
+        """
+        Conerts from wiser hub temperature format to decimal value
+        param temp: The wiser temperature to convert
+        return: Float
+        """
+        temp = round(temp/10,1)
+        return temp
+        
+    def __checkTempRange(self,temp):
+        """
+        Validates temperatures are within the allowed range for the wiser hub
+        param temp: The temperature to check
+        return: Boolean
+        """
+        if (temp != TEMP_OFF and (temp < TEMP_MINIMUM or temp > TEMP_MAXIMUM)):
+            return False
+        else:
+            return True
+
     def refreshData(self):
         """
         Forces a refresh of data
@@ -239,12 +273,12 @@ class wiserHub():
         if (mode=="AWAY"):
             if temperature==None:
                 raise Exception("setAwayHome set to AWAY but not temperature set")
-            if temperature== -20 or temperature <0 or temperature>30:
-              raise Exception("setAwayHome temperature can only be between 5 and 30 or -20(Off)")
+            if not (__checkTempRange(temperature)):
+                raise Exception("setAwayHome temperature can only be between 5 and 30 or -20(Off)")
         _LOGGER.info("Setting Home/Away : {}".format(mode))
-        temperature=temperature*10
+        
         if (mode=="AWAY"):
-            self.patchData={"type":2,"setPoint":temperature}
+            self.patchData={"type":2,"setPoint":self.__toWiserTemp(temperature)}
         else:
             self.patchData={"type":0,"setPoint":0}
         _LOGGER.debug ("patchdata {} ".format(self.patchData))
@@ -262,10 +296,10 @@ class wiserHub():
         param temperature:  The temperature in celcius from 5 to 30, -20 for Off
         """
         _LOGGER.info("Set Room {} Temperature to = {} ".format(roomId,temperature))
-        if ((temperature!=-20) and (temperature<5 or temperature>30)):
+        if not (__checkTempRange(temperature)):
             raise Exception("SetRoomTemperature : value of temperature must be between 5 and 30 OR -20 (off)")
-        apitemp=temperature*10
-        patchData={"RequestOverride":{"Type":"Manual","SetPoint":apitemp}}
+        
+        patchData={"RequestOverride":{"Type":"Manual","SetPoint":self.__toWiserTemp(temperature)}}
         self.response = requests.patch(WISERSETROOMTEMP.format(
             self.hubIP,roomId), headers=self.headers, json=patchData, timeout=TIMEOUT)
         
@@ -299,20 +333,21 @@ class wiserHub():
             #Do Auto
             patchData= {"Mode":"Auto"}
         elif (mode.lower()=="boost"):
-            temp=boost_temp*10
-            _LOGGER.debug("Setting Boost Temp to {}".format(temp))
-            patchData={"RequestOverride":{"Type":"Manual","DurationMinutes": boost_temp_time, "SetPoint":temp, "Originator":"App"}}
+            if (boost_temp < TEMP_MINIMUM or boost_temp > TEMP_MAXIMUM):
+                raise Exception("Boost temperature is set to {}. Boost temperature can only be between 5 and 30.".format(boost_temp))
+            _LOGGER.debug("Setting room {} to boost mode with temp of {} for {} mins".format(roomId, boost_temp, boost_temp_time))
+            patchData={"RequestOverride":{"Type":"Manual","DurationMinutes": boost_temp_time, "SetPoint":self.__toWiserTemp(boost_temp), "Originator":"App"}}
         elif (mode.lower()=="manual"):
-            # When setting back to manual , set the temp to the scheduled temp
-            newTemp=self.getRoom(roomId).get("ScheduledSetPoint")
+            # When setting to manual , set the temp to the current scheduled temp 
+            setTemp=self.__fromWiserTemp(self.getRoom(roomId).get("ScheduledSetPoint"))
+            #If current scheduled temp is less than 5C then set to min temp
+            setTemp = setTemp if setTemp >= ATTR_TEMP_MINIMUM else ATTR_TEMP_MINIMUM
             patchData = {"Mode": "Manual",
                          "RequestOverride": {"Type": "Manual",
-                                             "SetPoint": newTemp}}
-
-
+                                             "SetPoint": self.__toWiserTemp(setTemp)}}
         # Implement trv off as per https://github.com/asantaga/wiserheatingapi/issues/3
         elif (mode.lower()=="off"):
-            patchData = {"Mode": "Manual","RequestOverride": {"Type": "Manual","SetPoint": -200}}
+            patchData = {"Mode": "Manual","RequestOverride": {"Type": "Manual","SetPoint": self.__toWiserTemp(TEMP_OFF)}}
         else:
             raise Exception("Error setting setting room mode, received  {} but should be auto,boost,off or manual ".format(mode))
         
@@ -327,10 +362,11 @@ class wiserHub():
 
         # Set new mode
         self.response = requests.patch(WISERROOM.format(
-            self.hubIP,roomId), headers=self.headers, json=patchData, timeout=TIMEOUT)  
+            self.hubIP,roomId), headers=self.headers, json=patchData, timeout=TIMEOUT)        
         if self.response.status_code != 200:
-            _LOGGER.error("Set Room mode to {} resulted in {}".format(mode,self.response.status_code))
-            raise Exception("Error setting mode to error {} ".format(mode))
+            _LOGGER.error("Set Room {} to Mode {} resulted in {}".format(roomId,mode,self.response.status_code))
+            raise Exception("Error setting mode to {}, error {} ".format(mode, self.response.text))
+        _LOGGER.debug("Set room mode, error {} ({})".format(self.response.status_code, self.response.text))
         
 
     
