@@ -92,8 +92,10 @@ class wiserHub():
                     if smartValves!=None:
                         for valveId in smartValves:
                             self.device2roomMap[valveId]={"roomId":room.get("id"), "roomName":room.get("Name")}
-                    else:
-                        _LOGGER.warning("Room doesnt contain any smart valves, maybe an error/corruption?? ")
+                    #Show warning if room contains no devices.
+                    if roomStatId is None and smartValves is None:
+                        #No devices in room
+                        _LOGGER.warning("Room {} doesn't contain any smart valves or thermostats.".format(room.get("Name")))
                 _LOGGER.debug(" valve2roomMap{} ".format(self.device2roomMap))
             else:
                 _LOGGER.warning("Wiser found no rooms")
