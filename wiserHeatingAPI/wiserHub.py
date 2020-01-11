@@ -341,7 +341,7 @@ class wiserHub():
             # When setting to manual , set the temp to the current scheduled temp 
             setTemp=self.__fromWiserTemp(self.getRoom(roomId).get("ScheduledSetPoint"))
             #If current scheduled temp is less than 5C then set to min temp
-            setTemp = setTemp if setTemp >= ATTR_TEMP_MINIMUM else ATTR_TEMP_MINIMUM
+            setTemp = setTemp if setTemp >= TEMP_MINIMUM else TEMP_MINIMUM
             patchData = {"Mode": "Manual",
                          "RequestOverride": {"Type": "Manual",
                                              "SetPoint": self.__toWiserTemp(setTemp)}}
