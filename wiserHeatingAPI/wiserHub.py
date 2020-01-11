@@ -23,8 +23,10 @@ WISERMODEURL= "http://{}/data/domain/System/RequestOverride"
 WISERSETROOMTEMP= "http://{}//data/domain/Room/{}"
 WISERROOM="http://{}//data/domain/Room/{}"
 
-ATTR_TEMP_MINIMUM = 5
-ATTR_TEMP_MAXIMUM = 30
+TEMP_MINIMUM = 5
+TEMP_MAXIMUM = 30
+TEMP_OFF = -20
+
 TIMEOUT=10
 
 
@@ -41,17 +43,34 @@ class wiserHub():
         self.refreshData()          # Issue first refresh in init
         
     def __toWiserTemp(self,temp):
+        """
+        Converts from temperature to wiser hub format
+        param temp: The temperature to convert
+        return: Integer
+        """
         temp = int(temp*10)
         return temp
         
     def __fromWiserTemp(self,temp):
+        """
+        Conerts from wiser hub temperature format to decimal value
+        param temp: The wiser temperature to convert
+        return: Float
+        """
         temp = round(temp/10,1)
         return temp
         
-    @property
-    def max_temp(self):
-        return MAXTEMP
-        
+    def __checkTempRange(self,temp):
+        """
+        Validates temperatures are within the allowed range for the wiser hub
+        param temp: The temperature to check
+        return: Boolean
+        """
+        if (temp != TEMP_OFF and (temp < TEMP_MINIMUM or temp > TEMP_MAXIMUM)):
+            return False
+        else:
+            return True
+
     def refreshData(self):
         """
         Forces a refresh of data
@@ -254,7 +273,7 @@ class wiserHub():
         if (mode=="AWAY"):
             if temperature==None:
                 raise Exception("setAwayHome set to AWAY but not temperature set")
-            if ((temperature!=-20) and (temperature<5 or temperature>30)):
+            if not (__checkTempRange(temperature)):
                 raise Exception("setAwayHome temperature can only be between 5 and 30 or -20(Off)")
         _LOGGER.info("Setting Home/Away : {}".format(mode))
         
@@ -277,7 +296,7 @@ class wiserHub():
         param temperature:  The temperature in celcius from 5 to 30, -20 for Off
         """
         _LOGGER.info("Set Room {} Temperature to = {} ".format(roomId,temperature))
-        if ((temperature!=-20) and (temperature<5 or temperature>30)):
+        if not (__checkTempRange(temperature)):
             raise Exception("SetRoomTemperature : value of temperature must be between 5 and 30 OR -20 (off)")
         
         patchData={"RequestOverride":{"Type":"Manual","SetPoint":self.__toWiserTemp(temperature)}}
@@ -314,7 +333,7 @@ class wiserHub():
             #Do Auto
             patchData= {"Mode":"Auto"}
         elif (mode.lower()=="boost"):
-            if (boost_temp < 5 or boost_temp > 30):
+            if (boost_temp < TEMP_MINIMUM or boost_temp > TEMP_MAXIMUM):
                 raise Exception("Boost temperature is set to {}. Boost temperature can only be between 5 and 30.".format(boost_temp))
             _LOGGER.debug("Setting room {} to boost mode with temp of {} for {} mins".format(roomId, boost_temp, boost_temp_time))
             patchData={"RequestOverride":{"Type":"Manual","DurationMinutes": boost_temp_time, "SetPoint":self.__toWiserTemp(boost_temp), "Originator":"App"}}
@@ -328,7 +347,7 @@ class wiserHub():
                                              "SetPoint": self.__toWiserTemp(setTemp)}}
         # Implement trv off as per https://github.com/asantaga/wiserheatingapi/issues/3
         elif (mode.lower()=="off"):
-            patchData = {"Mode": "Manual","RequestOverride": {"Type": "Manual","SetPoint": self.__toWiserTemp(-20)}}
+            patchData = {"Mode": "Manual","RequestOverride": {"Type": "Manual","SetPoint": self.__toWiserTemp(TEMP_OFF)}}
         else:
             raise Exception("Error setting setting room mode, received  {} but should be auto,boost,off or manual ".format(mode))
         
