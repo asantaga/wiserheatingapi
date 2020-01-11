@@ -275,7 +275,7 @@ class wiserHub():
         if (mode=="AWAY"):
             if temperature==None:
                 raise Exception("setAwayHome set to AWAY but not temperature set")
-            if not (__checkTempRange(temperature)):
+            if not (self.__checkTempRange(temperature)):
                 raise Exception("setAwayHome temperature can only be between 5 and 30 or -20(Off)")
         _LOGGER.info("Setting Home/Away : {}".format(mode))
         
@@ -298,7 +298,7 @@ class wiserHub():
         param temperature:  The temperature in celcius from 5 to 30, -20 for Off
         """
         _LOGGER.info("Set Room {} Temperature to = {} ".format(roomId,temperature))
-        if not (__checkTempRange(temperature)):
+        if not (self.__checkTempRange(temperature)):
             raise Exception("SetRoomTemperature : value of temperature must be between 5 and 30 OR -20 (off)")
         
         patchData={"RequestOverride":{"Type":"Manual","SetPoint":self.__toWiserTemp(temperature)}}
