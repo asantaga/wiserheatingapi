@@ -23,6 +23,7 @@ WISERMODEURL= "http://{}/data/domain/System/RequestOverride"
 WISERSETROOMTEMP= "http://{}//data/domain/Room/{}"
 WISERROOM="http://{}//data/domain/Room/{}"
 
+TIMEOUT=10
 
 class wiserHub():
    
@@ -43,24 +44,29 @@ class wiserHub():
         """
         smartValves=[]
         _LOGGER.info("Updating Wiser Hub Data")
-        self.wiserHubData = requests.get(WISERHUBURL.format(
-            self.hubIP), headers=self.headers).json()
-        _LOGGER.debug("Wiser Hub Data received {} ".format(self.wiserHubData))
-        if self.getRooms()!=None:
-            for room in self.getRooms():
-                roomStatId=room.get("RoomStatId")
-                if roomStatId!=None:
-                    #RoomStat found add it to the list
-                    self.device2roomMap[roomStatId]={"roomId":room.get("id"), "roomName":room.get("Name")}
-                smartValves=room.get("SmartValveIds")
-                if smartValves!=None:
-                    for valveId in smartValves:
+        try:
+            self.wiserHubData = requests.get(WISERHUBURL.format(
+                self.hubIP), headers=self.headers, timeout=TIMEOUT).json()
+            _LOGGER.debug("Wiser Hub Data received {} ".format(self.wiserHubData))
+            if self.getRooms()!=None:
+                for room in self.getRooms():
+                    roomStatId=room.get("RoomStatId")
+                    if roomStatId!=None:
+                        #RoomStat found add it to the list
+                        self.device2roomMap[roomStatId]={"roomId":room.get("id"), "roomName":room.get("Name")}
+                    smartValves=room.get("SmartValveIds")
+                    if smartValves!=None:
+                        for valveId in smartValves:
                             self.device2roomMap[valveId]={"roomId":room.get("id"), "roomName":room.get("Name")}
-                else:
-                    _LOGGER.warning(" Room doesnt contain any smart valves, maybe an error/corruption?? ")
-            _LOGGER.debug(" valve2roomMap{} ".format(self.device2roomMap))
-        else:
-            _LOGGER.warning("Wiser found no rooms")
+                    else:
+                        _LOGGER.warning("Room doesnt contain any smart valves, maybe an error/corruption?? ")
+                _LOGGER.debug(" valve2roomMap{} ".format(self.device2roomMap))
+            else:
+                _LOGGER.warning("Wiser found no rooms")
+        except requests.Timeout:
+            _LOGGER.debug("Connection timed out trying to update from Wiser Hub")
+        except requests.ConnectionError:
+           _LOGGER.debug("Connection error trying to update from Wiser Hub")
         return self.wiserHubData
 
         
@@ -242,7 +248,7 @@ class wiserHub():
         else:
             self.patchData={"type":0,"setPoint":0}
         _LOGGER.debug ("patchdata {} ".format(self.patchData))
-        self.response = requests.patch(url=WISERMODEURL.format(self.hubIP), headers=self.headers,json =self.patchData )
+        self.response = requests.patch(url=WISERMODEURL.format(self.hubIP), headers=self.headers, json=self.patchData, timeout=TIMEOUT)
         if (self.response.status_code!=200):
             _LOGGER.debug("Set Home/Away Response code = {}".format(self.response.status_code))
             raise Exception("Error setting Home/Away , error {} {}".format(self.response.status_code, self.response.text))
@@ -261,7 +267,7 @@ class wiserHub():
         apitemp=temperature*10
         patchData={"RequestOverride":{"Type":"Manual","SetPoint":apitemp}}
         self.response = requests.patch(WISERSETROOMTEMP.format(
-            self.hubIP,roomId), headers=self.headers,json=patchData)
+            self.hubIP,roomId), headers=self.headers, json=patchData, timeout=TIMEOUT)
         
         if self.response.status_code != 200:
             _LOGGER.error("Set Room {} Temperature to = {} resulted in {}".format(roomId,temperature,self.response.status_code))
@@ -314,14 +320,14 @@ class wiserHub():
         if (mode.lower()!="boost"):
             cancelBoostPostData={"RequestOverride":{"Type":"None","DurationMinutes": 0, "SetPoint":0, "Originator":"App"}}
             
-            self.response = requests.patch(WISERROOM.format(self.hubIP,roomId), headers=self.headers,json=cancelBoostPostData)
+            self.response = requests.patch(WISERROOM.format(self.hubIP,roomId), headers=self.headers, json=cancelBoostPostData, timeout=TIMEOUT)
             if (self.response.status_code != 200):
                 _LOGGER.error("Cancelling boost resulted in {}".format(self.response.status_code))
                 raise Exception("Error cancelling boost {} ".format(mode))
 
         # Set new mode
         self.response = requests.patch(WISERROOM.format(
-            self.hubIP,roomId), headers=self.headers,json=patchData)        
+            self.hubIP,roomId), headers=self.headers, json=patchData, timeout=TIMEOUT)  
         if self.response.status_code != 200:
             _LOGGER.error("Set Room mode to {} resulted in {}".format(mode,self.response.status_code))
             raise Exception("Error setting mode to error {} ".format(mode))
