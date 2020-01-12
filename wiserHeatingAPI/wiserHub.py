@@ -308,7 +308,7 @@ class wiserHub():
             if temperature is None:
                 raise Exception("setAwayHome set to AWAY but not temperature set")
             if not (self.__checkTempRange(temperature)):
-                raise Exception("setAwayHome temperature can only be between 5 and 30 or -20(Off)")
+                raise Exception("setAwayHome temperature can only be between {} and {} or {}(Off)".format(TEMP_MINIMUM,TEMP_MAXIMUM,TEMP_OFF))
         _LOGGER.info("Setting Home/Away : {}".format(mode))
         
         if (mode=="AWAY"):
@@ -329,8 +329,7 @@ class wiserHub():
         """
         _LOGGER.info("Set Room {} Temperature to = {} ".format(roomId,temperature))
         if not (self.__checkTempRange(temperature)):
-            raise Exception("SetRoomTemperature : value of temperature must be between 5 and 30 OR -20 (off)")
-        
+            raise Exception("SetRoomTemperature : value of temperature must be between {} and {} OR {} (off)".format(TEMP_MINIMUM,TEMP_MAXIMUM,TEMP_OFF))
         patchData={"RequestOverride":{"Type":"Manual","SetPoint":self.__toWiserTemp(temperature)}}
         self.response = requests.patch(WISERSETROOMTEMP.format(
             self.hubIP,roomId), headers=self.headers, json=patchData, timeout=TIMEOUT)
@@ -363,7 +362,7 @@ class wiserHub():
             patchData= {"Mode":"Auto"}
         elif (mode.lower()=="boost"):
             if (boost_temp < TEMP_MINIMUM or boost_temp > TEMP_MAXIMUM):
-                raise Exception("Boost temperature is set to {}. Boost temperature can only be between 5 and 30.".format(boost_temp))
+                raise Exception("Boost temperature is set to {}. Boost temperature can only be between {} and {}.".format(boost_temp,TEMP_MINIMUM,TEMP_MAXIMUM))
             _LOGGER.debug("Setting room {} to boost mode with temp of {} for {} mins".format(roomId, boost_temp, boost_temp_time))
             patchData={"RequestOverride":{"Type":"Manual","DurationMinutes": boost_temp_time, "SetPoint":self.__toWiserTemp(boost_temp), "Originator":"App"}}
         elif (mode.lower()=="manual"):

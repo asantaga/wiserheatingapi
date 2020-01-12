@@ -1,4 +1,4 @@
-# Drayton Wiser Hub API v 1.0.2.2
+# Drayton Wiser Hub API v 1.0.3
 
 This repository contains a simple API which queries the Drayton Wiser Heating sysystem used in the UK.
 
@@ -47,6 +47,17 @@ To help understand the api simply look at the sample code ```wiserapitest.py``` 
 Documentation available in apidocs.html and within comments in the code
 
 Changes
-1.0.2.1 :  Added ability to turn trvs off and then back on by using setRoomMode
-           Fixed bug in setRoomTemperature that wasnt checking the ranges properly
-1.0.2.2 :  Changed temperature variables to be the real variable, and internally *10 
+1.0.2.1 
+* Added ability to turn trvs off and then back on by using setRoomMode
+* Fixed bug in setRoomTemperature that wasnt checking the ranges properly
+
+1.0.2.2
+* Changed temperature variables to be the real variable, and internally *10 
+
+1.0.3
+* Merged [pull7](https://github.com/asantaga/wiserheatingapi/pull/7) : Timeout and other improvements. 
+    * Fix for [issue 1](https://github.com/asantaga/wiserheatingapi/issues/1) Error when having zero TRVs
+    * Fix for [issue 4](https://github.com/asantaga/wiserheatingapi/issues/4)  Setting boost sometimes errors
+* Merged [pull5](https://github.com/asantaga/wiserheatingapi/pull/5) :  Ability to turn hotwater on/off/auto 
+
+
