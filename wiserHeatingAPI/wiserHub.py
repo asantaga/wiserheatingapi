@@ -49,7 +49,7 @@ class wiserHub():
         """
         temp = int(temp*10)
         return temp
-        
+
     def __fromWiserTemp(self,temp):
         """
         Conerts from wiser hub temperature format to decimal value
@@ -362,6 +362,7 @@ class wiserHub():
             patchData= {"Mode":"Auto"}
         elif (mode.lower()=="boost"):
             if (boost_temp < TEMP_MINIMUM or boost_temp > TEMP_MAXIMUM):
+
                 raise Exception("Boost temperature is set to {}. Boost temperature can only be between {} and {}.".format(boost_temp,TEMP_MINIMUM,TEMP_MAXIMUM))
             _LOGGER.debug("Setting room {} to boost mode with temp of {} for {} mins".format(roomId, boost_temp, boost_temp_time))
             patchData={"RequestOverride":{"Type":"Manual","DurationMinutes": boost_temp_time, "SetPoint":self.__toWiserTemp(boost_temp), "Originator":"App"}}
@@ -382,6 +383,7 @@ class wiserHub():
         # if not a boost operation cancel any current boost
         if (mode.lower()!="boost"):
             cancelBoostPostData={"RequestOverride":{"Type":"None","DurationMinutes": 0, "SetPoint":0, "Originator":"App"}}
+
             self.response = requests.patch(WISERROOM.format(self.hubIP,roomId), headers=self.headers, json=cancelBoostPostData, timeout=TIMEOUT)
             if (self.response.status_code != 200):
                 _LOGGER.error("Cancelling boost resulted in {}".format(self.response.status_code))
@@ -394,3 +396,4 @@ class wiserHub():
             _LOGGER.error("Set Room {} to Mode {} resulted in {}".format(roomId,mode,self.response.status_code))
             raise Exception("Error setting mode to {}, error {} ".format(mode, self.response.text))
         _LOGGER.debug("Set room mode, error {} ({})".format(self.response.status_code, self.response.text))
+
