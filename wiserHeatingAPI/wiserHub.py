@@ -20,20 +20,21 @@ Wiser Data URLS
 """
 WISERHUBURL = "http://{}/data/domain/"    # SSSS
 WISERMODEURL= "http://{}/data/domain/System/RequestOverride"
-WISERSETROOMTEMP= "http://{}//data/domain/Room/{}"
-WISERROOM="http://{}//data/domain/Room/{}"
+WISERSETROOMTEMP = "http://{}//data/domain/Room/{}"
+WISERROOM ="http://{}//data/domain/Room/{}"
 
 TEMP_MINIMUM = 5
 TEMP_MAXIMUM = 30
 TEMP_OFF = -20
 
-TIMEOUT=10
+TIMEOUT = 10
 
+__VERSION__ = "1.0.3"
 
 class wiserHub():
 
     def __init__(self,hubIP,secret):
-        _LOGGER.info("WiserHub API Init")
+        _LOGGER.info("WiserHub API Initialised : Version {}".format(__VERSION__))
         self.wiserHubData=None
         self.hubIP=hubIP
         self.hubSecret=secret
