@@ -126,6 +126,7 @@ class wiserHub():
         if self.wiserHubData==None:
             self.refreshData()
         return self.wiserHubData.get("Room")
+        
     def getRoom(self,roomId):
         """
         Convinience to get data on a single room
@@ -296,6 +297,7 @@ class wiserHub():
     def getRoomSchedule(self,roomId):
         """
         Gets Room Schedule Data
+        
         param roomId:
         return: json data
         """
