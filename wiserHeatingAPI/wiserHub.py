@@ -21,30 +21,31 @@ _LOGGER = logging.getLogger(__name__)
 Wiser Data URLS
 """
 WISERHUBURL = "http://{}/data/domain/"    # SSSS
-WISERMODEURL= "http://{}/data/domain/System/RequestOverride"
-WISERSETROOMTEMP= "http://{}//data/domain/Room/{}"
-WISERROOM="http://{}//data/domain/Room/{}"
-WISERSCHEDULEURL="http://{}/data/domain/Schedule/{}"
+WISERMODEURL = "http://{}/data/domain/System/RequestOverride"
+WISERSETROOMTEMP = "http://{}//data/domain/Room/{}"
+WISERROOM = "http://{}//data/domain/Room/{}"
+WISERSCHEDULEURL = "http://{}/data/domain/Schedule/{}"
+
 
 TEMP_MINIMUM = 5
 TEMP_MAXIMUM = 30
 TEMP_OFF = -20
 
-TIMEOUT=5
+TIMEOUT = 5
 
+__VERSION__ = "1.0.3"
 
 class wiserHub():
-   
 
     def __init__(self,hubIP,secret):
-        _LOGGER.info("WiserHub API Init")
+        _LOGGER.info("WiserHub API Initialised : Version {}".format(__VERSION__))
         self.wiserHubData=None
         self.hubIP=hubIP
         self.hubSecret=secret
         self.headers = {'SECRET': self.hubSecret,'Content-Type': 'application/json;charset=UTF-8'}
         self.device2roomMap={}      # Dict holding Valve2Room mapping convinience variable
         self.refreshData()          # Issue first refresh in init
-        
+
     def __toWiserTemp(self,temp):
         """
         Converts from temperature to wiser hub format
@@ -53,7 +54,7 @@ class wiserHub():
         """
         temp = int(temp*10)
         return temp
-        
+
     def __fromWiserTemp(self,temp):
         """
         Conerts from wiser hub temperature format to decimal value
@@ -88,11 +89,11 @@ class wiserHub():
             if self.getRooms()!=None:
                 for room in self.getRooms():
                     roomStatId=room.get("RoomStatId")
-                    if roomStatId!=None:
+                    if roomStatId is not None:
                         #RoomStat found add it to the list
                         self.device2roomMap[roomStatId]={"roomId":room.get("id"), "roomName":room.get("Name")}
                     smartValves=room.get("SmartValveIds")
-                    if smartValves!=None:
+                    if smartValves is not None:
                         for valveId in smartValves:
                             self.device2roomMap[valveId]={"roomId":room.get("id"), "roomName":room.get("Name")}
                     #Show warning if room contains no devices.
@@ -108,15 +109,13 @@ class wiserHub():
            _LOGGER.debug("Connection error trying to update from Wiser Hub")
         return self.wiserHubData
 
-        
-
     def getHubData(self):
         """
         Retrieves the full JSON payload , for functions where I havent provided a API yet
 
         returns : JSON Data
         """
-        if (self.wiserHubData==None):
+        if self.wiserHubData==None:
             self.refreshData()
         return self.wiserHubData
 
@@ -124,7 +123,7 @@ class wiserHub():
         """
         Gets Room Data as JSON Payload
         """
-        if (self.wiserHubData==None):
+        if self.wiserHubData==None:
             self.refreshData()
         return self.wiserHubData.get("Room")
     def getRoom(self,roomId):
@@ -134,9 +133,9 @@ class wiserHub():
         param roomId: The roomID
         return:
         """
-        if (self.wiserHubData==None):
+        if self.wiserHubData==None:
             self.refreshData()
-        if (self.wiserHubData.get("Room")==None):
+        if self.wiserHubData.get("Room")==None:
             _LOGGER.warning("getRoom called but no rooms found")
             return None
         for room in (self.wiserHubData.get("Room")):
@@ -150,7 +149,7 @@ class wiserHub():
 
         return: JSON with system data
         """
-        if (self.wiserHubData==None):
+        if self.wiserHubData==None:
             self.refreshData()
         return self.wiserHubData.get("System")
 
@@ -161,7 +160,7 @@ class wiserHub():
         return: JSON with hotwater data
 
         """
-        if (self.wiserHubData==None):
+        if self.wiserHubData==None:
             self.refreshData()
         return self.wiserHubData.get("HotWater")
 
@@ -171,7 +170,7 @@ class wiserHub():
 
         return: JSON data
         """
-        if (self.wiserHubData==None):
+        if self.wiserHubData==None:
             self.refreshData()
         return self.wiserHubData.get("HeatingChannel")
 
@@ -181,7 +180,7 @@ class wiserHub():
 
         return: JSON data
         """
-        if (self.wiserHubData==None):
+        if self.wiserHubData==None:
             self.refreshData()
         return self.wiserHubData.get("Device")
 
@@ -192,16 +191,15 @@ class wiserHub():
         param deviceId:
         return: Device JSON Data
         """
-        if (self.wiserHubData==None):
+        if self.wiserHubData==None:
             self.refreshData()
-        if (self.wiserHubData.get("Device")==None):
+        if self.wiserHubData.get("Device")==None:
             _LOGGER.warning("getRoom called but no rooms found")
             return None
         for device in (self.wiserHubData.get("Device")):
             if (device.get("id")==deviceId):
                 return device
         return None
-
 
     def getDeviceRoom(self,deviceId):
         """
@@ -221,7 +219,7 @@ class wiserHub():
         Returns heating relay status
         return:  On or Off
         """
-        if (self.wiserHubData==None):
+        if self.wiserHubData==None:
             self.refreshData()
         heatingRelayStatus="Off"
         # There could be multiple heating channels, 
@@ -230,7 +228,7 @@ class wiserHub():
             if heatingChannel.get("HeatingRelayState")=="On":
                 heatingRelayStatus="On"
         return heatingRelayStatus
-    
+
     def getHotwaterRelayStatus(self):
         """
          Returns hotwater relay status
@@ -238,10 +236,46 @@ class wiserHub():
 
         """
 
-        if (self.wiserHubData==None):
+        if self.wiserHubData==None:
             self.refreshData()
         return self.wiserHubData.get("HotWater")[0].get("WaterHeatingState")
-    
+
+    def setHotwaterMode(self, mode):
+        """
+          Switch Hot Water on or off manually, or reset to 'Auto' (schedule).
+
+          'mode' can be "on", "off" or "auto".
+        """
+
+        # Wiser requires a temperature when patching the Hot Water state,
+        # reflecting 'on' or 'off'
+        DHWOnTemp  = 1100
+        DHWOffTemp = -200
+
+        modeMapping = {
+          'on':   {"RequestOverride":{"Type":"Manual", "SetPoint": DHWOnTemp}},
+          'off':  {"RequestOverride":{"Type":"Manual", "SetPoint": DHWOffTemp}},
+          'auto': {"RequestOverride":{"Type":"None", "Mode": "Auto"}},
+        }
+
+        _mode = mode.lower()
+        if _mode not in ['on', 'off', 'auto']:
+          raise Exception("Hot Water can be either 'on', 'off' or 'auto' - not '%s'" % _mode)
+
+        # Obtain our DHW control ID
+        if self.wiserHubData==None:
+            self.refreshData()
+        DHWId = self.wiserHubData.get("HotWater")[0].get("id")
+
+        _url = WISERHUBURL.format(self.hubIP) + "/HotWater/{}/".format(DHWId)
+        _LOGGER.debug ("Sending Patch Data: {}, to URL [{}]".format(modeMapping.get(_mode), _url))
+        self.response = requests.patch(url=_url, headers=self.headers, json=modeMapping.get(_mode))
+        if (self.response.status_code!=200):
+            _LOGGER.debug("Set DHW Response code = {}".format(self.response.status_code))
+            raise Exception("Error setting hot water mode to {}, error {} {}".format(_mode, self.response.status_code, self.response.text))
+
+        return True
+
     def getRoomStatData(self,deviceId):
         """
         Gets Room Thermostats Data
@@ -249,9 +283,9 @@ class wiserHub():
         param deviceId:
         return:
         """
-        if (self.wiserHubData==None):
+        if self.wiserHubData==None:
             self.refreshData()
-        if (self.wiserHubData['RoomStat']==None):
+        if self.wiserHubData['RoomStat']==None:
                 _LOGGER.warning("getRoom called but no rooms found")
                 return None
         for roomStat in self.wiserHubData['RoomStat']:
@@ -262,7 +296,6 @@ class wiserHub():
     def getRoomSchedule(self,roomId):
         """
         Gets Room Schedule Data
-
         param roomId:
         return: json data
         """
@@ -363,10 +396,10 @@ class wiserHub():
             raise Exception("setAwayHome can only be HOME or AWAY")
 
         if (mode=="AWAY"):
-            if temperature==None:
+            if temperature is None:
                 raise Exception("setAwayHome set to AWAY but not temperature set")
             if not (self.__checkTempRange(temperature)):
-                raise Exception("setAwayHome temperature can only be between 5 and 30 or -20(Off)")
+                raise Exception("setAwayHome temperature can only be between {} and {} or {}(Off)".format(TEMP_MINIMUM,TEMP_MAXIMUM,TEMP_OFF))
         _LOGGER.info("Setting Home/Away : {}".format(mode))
         
         if (mode=="AWAY"):
@@ -379,8 +412,6 @@ class wiserHub():
             _LOGGER.debug("Set Home/Away Response code = {}".format(self.response.status_code))
             raise Exception("Error setting Home/Away , error {} {}".format(self.response.status_code, self.response.text))
 
-
-
     def setRoomTemperature(self, roomId, temperature):
         """
         Sets the room temperature
@@ -389,18 +420,14 @@ class wiserHub():
         """
         _LOGGER.info("Set Room {} Temperature to = {} ".format(roomId,temperature))
         if not (self.__checkTempRange(temperature)):
-            raise Exception("SetRoomTemperature : value of temperature must be between 5 and 30 OR -20 (off)")
-        
+            raise Exception("SetRoomTemperature : value of temperature must be between {} and {} OR {} (off)".format(TEMP_MINIMUM,TEMP_MAXIMUM,TEMP_OFF))
         patchData={"RequestOverride":{"Type":"Manual","SetPoint":self.__toWiserTemp(temperature)}}
         self.response = requests.patch(WISERSETROOMTEMP.format(
             self.hubIP,roomId), headers=self.headers, json=patchData, timeout=TIMEOUT)
-        
         if self.response.status_code != 200:
             _LOGGER.error("Set Room {} Temperature to = {} resulted in {}".format(roomId,temperature,self.response.status_code))
             raise Exception("Error setting temperature, error {} ".format(self.response.text))
         _LOGGER.debug("Set room Temp, error {} ({})".format(self.response.status_code, self.response.text))
-
-
 
 
     # Set Room Mode (Manual, Boost,Off or Auto )
@@ -426,7 +453,8 @@ class wiserHub():
             patchData= {"Mode":"Auto"}
         elif (mode.lower()=="boost"):
             if (boost_temp < TEMP_MINIMUM or boost_temp > TEMP_MAXIMUM):
-                raise Exception("Boost temperature is set to {}. Boost temperature can only be between 5 and 30.".format(boost_temp))
+
+                raise Exception("Boost temperature is set to {}. Boost temperature can only be between {} and {}.".format(boost_temp,TEMP_MINIMUM,TEMP_MAXIMUM))
             _LOGGER.debug("Setting room {} to boost mode with temp of {} for {} mins".format(roomId, boost_temp, boost_temp_time))
             patchData={"RequestOverride":{"Type":"Manual","DurationMinutes": boost_temp_time, "SetPoint":self.__toWiserTemp(boost_temp), "Originator":"App"}}
         elif (mode.lower()=="manual"):
@@ -442,11 +470,11 @@ class wiserHub():
             patchData = {"Mode": "Manual","RequestOverride": {"Type": "Manual","SetPoint": self.__toWiserTemp(TEMP_OFF)}}
         else:
             raise Exception("Error setting setting room mode, received  {} but should be auto,boost,off or manual ".format(mode))
-        
+
         # if not a boost operation cancel any current boost
         if (mode.lower()!="boost"):
             cancelBoostPostData={"RequestOverride":{"Type":"None","DurationMinutes": 0, "SetPoint":0, "Originator":"App"}}
-            
+
             self.response = requests.patch(WISERROOM.format(self.hubIP,roomId), headers=self.headers, json=cancelBoostPostData, timeout=TIMEOUT)
             if (self.response.status_code != 200):
                 _LOGGER.error("Cancelling boost resulted in {}".format(self.response.status_code))
@@ -459,8 +487,4 @@ class wiserHub():
             _LOGGER.error("Set Room {} to Mode {} resulted in {}".format(roomId,mode,self.response.status_code))
             raise Exception("Error setting mode to {}, error {} ".format(mode, self.response.text))
         _LOGGER.debug("Set room mode, error {} ({})".format(self.response.status_code, self.response.text))
-        
-
-    
-    
 

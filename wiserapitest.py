@@ -29,7 +29,7 @@ try:
     # wh.refreshdata()
     # print("itrv 8 is in room {}".format(wh.getDeviceRoom(8)['roomName']))
     # Heating State
-    print ("Hot water status {} ".format(wh.getHeatingRelayStatus()))
+    print ("Hot water status {} ".format(wh.getHotwaterRelayStatus()))
     print ("Roomstat humidity {}".format(wh.getRoomStatData(1).get("MeasuredHumidity")))
     
     print("--------------------------------")
@@ -72,7 +72,10 @@ try:
 
     for room in wh.getRooms():
         smartValves=room.get("SmartValveIds")
-        print ("Room {}, setpoint={}C, current temp={}C".format(room.get("Name"),room.get("CurrentSetPoint")/10,room.get("CalculatedTemperature")/10    )    )
+        if smartValves is None: 
+          print("Room {} has no smartValves")
+        else:
+          print ("Room {}, setpoint={}C, current temp={}C".format(room.get("Name"),room.get("CurrentSetPoint")/10,room.get("CalculatedTemperature")/10    )    )
 
 
 # Other Examples
@@ -85,7 +88,7 @@ try:
 # Set room 4 TRVs to manual, setting normal scheduled temp
 #    wh.setRoomMode(4,"manual")
 # Set temperature of room 4 to 13C
-    wh.setRoomTemperature(4,10)
+#    wh.setRoomTemperature(4,10)
 # Set TRV off in room 4 to Off
 #    wh.setRoomTemperature(4,-20)
 
