@@ -20,6 +20,7 @@ for lines in data:
 
 print (' Wiser Hub IP= {} , WiserKey= {}'.format(wiserip,wiserkey))
 
+f.close
 
 try:
 #
@@ -30,7 +31,7 @@ try:
     # Heating State
     print ("Hot water status {} ".format(wh.getHeatingRelayStatus()))
     print ("Roomstat humidity {}".format(wh.getRoomStatData(1).get("MeasuredHumidity")))
-
+    
     print("--------------------------------")
     print ("Raw Room Data {} ".format(wh.getRooms()))
     print("--------------------------------")
@@ -39,7 +40,31 @@ try:
     dev=wh.getDevices()
     print (" Device Data {} ".format(dev))
     print ("--------------------------------")
-
+    
+    print("--------------------------------")
+    print ("Schedule output {}".format(wh.getRoomSchedule(4)))
+    print ("--------------------------------")
+    
+    
+    # Load schedule file and set
+    print("--------------------------------")
+    print("Set room schedule")
+    with open('dining.json', 'r') as f:
+      data = json.load(f)
+      wh.setRoomSchedule(4,data)
+      f.close
+    print("--------------------------------")
+    
+    print("--------------------------------")
+    print("Set room schedule from file")
+    wh.setRoomScheduleFromFile(4, "./dining2.json")
+    print("--------------------------------")
+    
+    print("--------------------------------")
+    print("Copy room schedule")
+    wh.copyRoomSchedule(4,3)
+    print("--------------------------------")
+    
 #  List all Rooms
   
     findValve=0
