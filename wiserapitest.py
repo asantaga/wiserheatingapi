@@ -44,27 +44,36 @@ try:
     print("--------------------------------")
     print ("Schedule output {}".format(wh.getRoomSchedule(4)))
     print ("--------------------------------")
-    
-    
-    # Load schedule file and set
+
+    # Query Schedule for Room4
+    with open('./room4schedule.json', 'w') as f:
+        room4schedule = wh.getRoomSchedule(4)
+        json.dump(room4schedule, f)
+        f.close()
+        print("File room4schedule.json created ")
+    # Load schedule file and set schedule
     print("--------------------------------")
     print("Set room schedule")
-    with open('dining.json', 'r') as f:
-      data = json.load(f)
-      wh.setRoomSchedule(4,data)
-      f.close
+    with open('./room4schedule.json', 'r') as f:
+        data = json.load(f)
+        wh.setRoomSchedule(4, data)
+        f.close
+        print("Schedule for room 4 loaded indirectly from file")
+
     print("--------------------------------")
-    
+    # Load schedule and set direct from file
     print("--------------------------------")
     print("Set room schedule from file")
-    wh.setRoomScheduleFromFile(4, "./dining2.json")
+    wh.setRoomScheduleFromFile(4, "./room4schedule.json")
+    print("Schedule for room 4 loaded directly from file")
     print("--------------------------------")
-    
-    print("--------------------------------")
-    print("Copy room schedule")
-    wh.copyRoomSchedule(4,3)
-    print("--------------------------------")
-    
+
+#    print("--------------------------------")
+#    print("Copy room schedule")
+#    wh.copyRoomSchedule(4,3)
+#    print("--------------------------------")
+
+
 #  List all Rooms
   
     findValve=0

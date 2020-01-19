@@ -4,3 +4,4 @@ build
 dist
 wiser_heating_api.egg-info
 .idea
+room4schedule.json
