@@ -20,6 +20,7 @@ for lines in data:
 
 print (' Wiser Hub IP= {} , WiserKey= {}'.format(wiserip,wiserkey))
 
+f.close
 
 try:
 #
@@ -30,7 +31,7 @@ try:
     # Heating State
     print ("Hot water status {} ".format(wh.getHotwaterRelayStatus()))
     print ("Roomstat humidity {}".format(wh.getRoomStatData(1).get("MeasuredHumidity")))
-
+    
     print("--------------------------------")
     print ("Raw Room Data {} ".format(wh.getRooms()))
     print("--------------------------------")
@@ -39,6 +40,39 @@ try:
     dev=wh.getDevices()
     print (" Device Data {} ".format(dev))
     print ("--------------------------------")
+    
+    print("--------------------------------")
+    print ("Schedule output {}".format(wh.getRoomSchedule(4)))
+    print ("--------------------------------")
+
+    # Query Schedule for Room4
+    with open('./room4schedule.json', 'w') as f:
+        room4schedule = wh.getRoomSchedule(4)
+        json.dump(room4schedule, f)
+        f.close()
+        print("File room4schedule.json created ")
+    # Load schedule file and set schedule
+    print("--------------------------------")
+    print("Set room schedule")
+    with open('./room4schedule.json', 'r') as f:
+        data = json.load(f)
+        wh.setRoomSchedule(4, data)
+        f.close
+        print("Schedule for room 4 loaded indirectly from file")
+
+    print("--------------------------------")
+    # Load schedule and set direct from file
+    print("--------------------------------")
+    print("Set room schedule from file")
+    wh.setRoomScheduleFromFile(4, "./room4schedule.json")
+    print("Schedule for room 4 loaded directly from file")
+    print("--------------------------------")
+
+#    print("--------------------------------")
+#    print("Copy room schedule")
+#    wh.copyRoomSchedule(4,3)
+#    print("--------------------------------")
+
 
 #  List all Rooms
   

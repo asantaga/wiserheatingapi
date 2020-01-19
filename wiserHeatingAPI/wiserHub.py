@@ -12,6 +12,8 @@ This API Facade allows you to communicate with your wiserhub. This API is used b
 
 import logging
 import requests
+import json
+import os
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -19,15 +21,17 @@ _LOGGER = logging.getLogger(__name__)
 Wiser Data URLS
 """
 WISERHUBURL = "http://{}/data/domain/"    # SSSS
-WISERMODEURL= "http://{}/data/domain/System/RequestOverride"
+WISERMODEURL = "http://{}/data/domain/System/RequestOverride"
 WISERSETROOMTEMP = "http://{}//data/domain/Room/{}"
-WISERROOM ="http://{}//data/domain/Room/{}"
+WISERROOM = "http://{}//data/domain/Room/{}"
+WISERSCHEDULEURL = "http://{}/data/domain/Schedule/{}"
+
 
 TEMP_MINIMUM = 5
 TEMP_MAXIMUM = 30
 TEMP_OFF = -20
 
-TIMEOUT = 10
+TIMEOUT = 5
 
 __VERSION__ = "1.0.3"
 
@@ -122,6 +126,7 @@ class wiserHub():
         if self.wiserHubData==None:
             self.refreshData()
         return self.wiserHubData.get("Room")
+        
     def getRoom(self,roomId):
         """
         Convinience to get data on a single room
@@ -274,7 +279,7 @@ class wiserHub():
 
     def getRoomStatData(self,deviceId):
         """
-        Gets Roomt Thermostats Data
+        Gets Room Thermostats Data
 
         param deviceId:
         return:
@@ -287,8 +292,95 @@ class wiserHub():
         for roomStat in self.wiserHubData['RoomStat']:
             if roomStat.get("id")==deviceId:
                 return roomStat
-        return None
+        return None 
+        
+    def getRoomSchedule(self,roomId):
+        """
+        Gets Room Schedule Data
+        
+        param roomId:
+        return: json data
+        """
+        scheduleId = self.getRoom(roomId).get("ScheduleId")
+        
+        if scheduleId is not None:
+            for schedule in (self.wiserHubData.get("Schedule")):
+                if (schedule.get("id")==scheduleId):
+                    return schedule
+            return None
+        else:
+            return None
+        
+    def setRoomSchedule(self, roomId, scheduleData: dict):
+        """
+        Sets Room Schedule
 
+        param roomId:
+        param scheduleData: json data for schedule
+        return:
+        """
+        scheduleId = self.getRoom(roomId).get("ScheduleId")
+        
+        if scheduleId is not None:
+            self.patchData=scheduleData
+            self.response = requests.patch(url=WISERSCHEDULEURL.format(self.hubIP, scheduleId), headers=self.headers, json=self.patchData, timeout=TIMEOUT)
+            
+            if (self.response.status_code!=200):
+                _LOGGER.debug("Set Schedule Response code = {}".format(self.response.status_code))
+                raise Exception("Error setting schedule for room {} , error {} {}".format(roomId, self.response.status_code, self.response.text))
+        else:
+            raise Exception("No schedule found that matches roomId")
+            
+    def setRoomScheduleFromFile(self, roomId, scheduleFile: str):
+        """
+        Sets Room Schedule
+
+        param roomId:
+        param scheduleData: json data for schedule
+        return:
+        """
+        scheduleId = self.getRoom(roomId).get("ScheduleId")
+        scheduleData = ""
+        
+        if scheduleId is not None:
+            if os.path.exists(scheduleFile):
+                try:
+                    with open(scheduleFile, 'r') as f:
+                        scheduleData = json.load(f)
+                except:
+                    raise Exception("Error reading file {}".format(scheduleFile))
+
+                self.patchData=scheduleData
+                self.response = requests.patch(url=WISERSCHEDULEURL.format(self.hubIP, scheduleId), headers=self.headers, json=self.patchData, timeout=TIMEOUT)
+                
+                if (self.response.status_code!=200):
+                    _LOGGER.debug("Set Schedule Response code = {}".format(self.response.status_code))
+                    raise Exception("Error setting schedule for room {} , error {} {}".format(roomId, self.response.status_code, self.response.text))
+            else:
+                raise Exception("Schedule file, {}, not found.".format(os.path.abspath(scheduleFile)))
+        else:
+            raise Exception("No schedule found that matches roomId")
+
+            
+    def copyRoomSchedule(self, fromRoomId, toRoomId):
+        """
+        Copies Room Schedule from one room to another
+
+        param fromRoomId:
+        param toRoomId:
+        return: boolean
+        """
+        scheduleData = self.getRoomSchedule(fromRoomId)
+        
+        print(json.dumps(scheduleData))
+        
+        print("TYPE:{}".format(type(scheduleData)))
+
+        if scheduleData != None:
+            self.setRoomSchedule(toRoomId,scheduleData)
+        else:
+            raise Exception("Error copying schedule.  One of the room Ids is not valid")
+        
     def setHomeAwayMode(self,mode,temperature=10):
         """
         Sets default Home or Away mode, optionally allows you to set a temperature for away mode
