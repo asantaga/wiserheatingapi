@@ -1,4 +1,4 @@
-# Drayton Wiser Hub API v 1.0.3
+# Drayton Wiser Hub API v 1.0.4
 
 This repository contains a simple API which queries the Drayton Wiser Heating sysystem used in the UK.
 
@@ -7,6 +7,7 @@ The API functionality provides the following functionality
 - Ability to query all thermostats and room stats
 - Ability to set temperature of room and TRV thermostats
 - Ability to query various data about the system (like heating status)
+- Ability to query and set schedules for rooms
 
 The project is closely associated with the Wiser HomeAssitant component availabe here https://github.com/asantaga/wiserHomeAssistantPlatform
 
@@ -46,7 +47,8 @@ To help understand the api simply look at the sample code ```wiserapitest.py``` 
 
 Documentation available in apidocs.html and within comments in the code
 
-Changes
+*Changelog*
+
 1.0.2.1 
 * Added ability to turn trvs off and then back on by using setRoomMode
 * Fixed bug in setRoomTemperature that wasnt checking the ranges properly
@@ -60,4 +62,7 @@ Changes
     * Fix for [issue 4](https://github.com/asantaga/wiserheatingapi/issues/4)  Setting boost sometimes errors
 * Merged [pull5](https://github.com/asantaga/wiserheatingapi/pull/5) :  Ability to turn hotwater on/off/auto 
 
+1.0.4 
+* Merged https://github.com/asantaga/wiserheatingapi/pull/9 : Schedule export/import
+  
 
