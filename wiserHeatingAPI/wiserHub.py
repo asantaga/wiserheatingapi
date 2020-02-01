@@ -15,6 +15,7 @@ import requests
 import json
 import os
 
+
 _LOGGER = logging.getLogger(__name__)
 
 """
@@ -44,6 +45,10 @@ class wiserHub():
         self.hubSecret=secret
         self.headers = {'SECRET': self.hubSecret,'Content-Type': 'application/json;charset=UTF-8'}
         self.device2roomMap={}      # Dict holding Valve2Room mapping convinience variable
+        self.system = {}
+        self.rooms = {}
+        self.schedules = {}
+        self.devices = {}
         self.refreshData()          # Issue first refresh in init
 
     def __toWiserTemp(self,temp):
@@ -161,7 +166,7 @@ class wiserHub():
         return: JSON with hotwater data
 
         """
-        if self.wiserHubData==None:
+        if self.wiserHubData is None:
             self.refreshData()
         return self.wiserHubData.get("HotWater")
 
@@ -171,7 +176,7 @@ class wiserHub():
 
         return: JSON data
         """
-        if self.wiserHubData==None:
+        if self.wiserHubData is None:
             self.refreshData()
         return self.wiserHubData.get("HeatingChannel")
 
@@ -181,7 +186,7 @@ class wiserHub():
 
         return: JSON data
         """
-        if self.wiserHubData==None:
+        if self.wiserHubData is None:
             self.refreshData()
         return self.wiserHubData.get("Device")
 
@@ -201,6 +206,11 @@ class wiserHub():
             if (device.get("id")==deviceId):
                 return device
         return None
+        
+    def getSchedules(self):
+        if self.wiserHubData is None:
+            self.refreshData()
+        return self.wiserHubData.get("Schedule")
 
     def getDeviceRoom(self,deviceId):
         """
@@ -276,6 +286,20 @@ class wiserHub():
             raise Exception("Error setting hot water mode to {}, error {} {}".format(_mode, self.response.status_code, self.response.text))
 
         return True
+        
+    def setSystemSwitch(self, switch, mode = False):
+        
+        self.patchData = {switch : mode }
+        self.url = WISERHUBURL + "System"
+        
+        _LOGGER.debug ("patchdata {} ".format(self.patchData))
+        self.response = requests.patch(url=self.url.format(self.hubIP), headers=self.headers, json=self.patchData, timeout=TIMEOUT)
+        if (self.response.status_code!=200):
+            _LOGGER.debug("Set {} Response code = {}".format(switch, self.response.status_code))
+            raise Exception("Error setting {} , error {} {}".format(switch, self.response.status_code, self.response.text))
+        
+        
+        
 
     def getRoomStatData(self,deviceId):
         """
@@ -302,14 +326,10 @@ class wiserHub():
         return: json data
         """
         scheduleId = self.getRoom(roomId).get("ScheduleId")
-        
-        if scheduleId is not None:
-            for schedule in (self.wiserHubData.get("Schedule")):
-                if (schedule.get("id")==scheduleId):
-                    return schedule
-            return None
-        else:
-            return None
+        for schedule in self.wiserHubData.get("Schedule"):
+            if schedule.get("id") == scheduleId:
+                return schedule
+
         
     def setRoomSchedule(self, roomId, scheduleData: dict):
         """
@@ -380,7 +400,8 @@ class wiserHub():
             self.setRoomSchedule(toRoomId,scheduleData)
         else:
             raise Exception("Error copying schedule.  One of the room Ids is not valid")
-        
+            
+
     def setHomeAwayMode(self,mode,temperature=10):
         """
         Sets default Home or Away mode, optionally allows you to set a temperature for away mode
@@ -489,4 +510,5 @@ class wiserHub():
             _LOGGER.error("Set Room {} to Mode {} resulted in {}".format(roomId,mode,self.response.status_code))
             raise Exception("Error setting mode to {}, error {} ".format(mode, self.response.text))
         _LOGGER.debug("Set room mode, error {} ({})".format(self.response.status_code, self.response.text))
+        return self.response
 
