@@ -15,7 +15,6 @@ import requests
 import json
 import os
 
-
 _LOGGER = logging.getLogger(__name__)
 
 """
@@ -202,7 +201,7 @@ class wiserHub():
             if (device.get("id")==deviceId):
                 return device
         return None
-        
+
     def getDeviceRoom(self,deviceId):
         """
         Convinience function to return the name of a room which is associated with a device (roomstat or trf)
@@ -288,9 +287,6 @@ class wiserHub():
         if (self.response.status_code!=200):
             _LOGGER.debug("Set {} Response code = {}".format(switch, self.response.status_code))
             raise Exception("Error setting {} , error {} {}".format(switch, self.response.status_code, self.response.text))
-        
-        
-        
 
     def getRoomStatData(self,deviceId):
         """
@@ -317,9 +313,13 @@ class wiserHub():
         return: json data
         """
         scheduleId = self.getRoom(roomId).get("ScheduleId")
-        for schedule in self.wiserHubData.get("Schedule"):
-            if schedule.get("id") == scheduleId:
-                return schedule
+        if scheduleId is not None:
+            for schedule in (self.wiserHubData.get("Schedule")):
+                if (schedule.get("id")==scheduleId):
+                    return schedule
+            return None
+        else:
+            return None
 
         
     def setRoomSchedule(self, roomId, scheduleData: dict):
@@ -391,7 +391,6 @@ class wiserHub():
             self.setRoomSchedule(toRoomId,scheduleData)
         else:
             raise Exception("Error copying schedule.  One of the room Ids is not valid")
-            
 
     def setHomeAwayMode(self,mode,temperature=10):
         """
@@ -501,5 +500,4 @@ class wiserHub():
             _LOGGER.error("Set Room {} to Mode {} resulted in {}".format(roomId,mode,self.response.status_code))
             raise Exception("Error setting mode to {}, error {} ".format(mode, self.response.text))
         _LOGGER.debug("Set room mode, error {} ({})".format(self.response.status_code, self.response.text))
-        return self.response
 
