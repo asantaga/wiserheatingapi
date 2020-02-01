@@ -45,10 +45,6 @@ class wiserHub():
         self.hubSecret=secret
         self.headers = {'SECRET': self.hubSecret,'Content-Type': 'application/json;charset=UTF-8'}
         self.device2roomMap={}      # Dict holding Valve2Room mapping convinience variable
-        self.system = {}
-        self.rooms = {}
-        self.schedules = {}
-        self.devices = {}
         self.refreshData()          # Issue first refresh in init
 
     def __toWiserTemp(self,temp):
@@ -166,7 +162,7 @@ class wiserHub():
         return: JSON with hotwater data
 
         """
-        if self.wiserHubData is None:
+        if self.wiserHubData==None:
             self.refreshData()
         return self.wiserHubData.get("HotWater")
 
@@ -176,7 +172,7 @@ class wiserHub():
 
         return: JSON data
         """
-        if self.wiserHubData is None:
+        if self.wiserHubData==None:
             self.refreshData()
         return self.wiserHubData.get("HeatingChannel")
 
@@ -186,7 +182,7 @@ class wiserHub():
 
         return: JSON data
         """
-        if self.wiserHubData is None:
+        if self.wiserHubData==None:
             self.refreshData()
         return self.wiserHubData.get("Device")
 
@@ -207,11 +203,6 @@ class wiserHub():
                 return device
         return None
         
-    def getSchedules(self):
-        if self.wiserHubData is None:
-            self.refreshData()
-        return self.wiserHubData.get("Schedule")
-
     def getDeviceRoom(self,deviceId):
         """
         Convinience function to return the name of a room which is associated with a device (roomstat or trf)
