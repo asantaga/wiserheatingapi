@@ -20,11 +20,13 @@ _LOGGER = logging.getLogger(__name__)
 """
 Wiser Data URLS
 """
-WISERHUBURL = "http://{}/data/domain/"    # SSSS
+WISERHUBURL = "http://{}/data/domain/"
 WISERMODEURL = "http://{}/data/domain/System/RequestOverride"
 WISERSETROOMTEMP = "http://{}//data/domain/Room/{}"
 WISERROOM = "http://{}//data/domain/Room/{}"
 WISERSCHEDULEURL = "http://{}/data/domain/Schedule/{}"
+WISERSMARTPLUGURL = "http://{}/data/domain/SmartPlug/{}"
+WISERSMARTPLUGSURL = "http://{}/data/domain/SmartPlug"
 
 
 TEMP_MINIMUM = 5
@@ -501,3 +503,25 @@ class wiserHub():
             raise Exception("Error setting mode to {}, error {} ".format(mode, self.response.text))
         _LOGGER.debug("Set room mode, error {} ({})".format(self.response.status_code, self.response.text))
 
+    def getSmartPlugs(self):
+        return self.getHubData().get("SmartPlug")
+
+    def setSmartPlugMode(self, smartPlugId, smartPlugMode):
+
+        if (smartPlugMode.title() not in ["On","Off"]):
+            _LOGGER.error("SmartPlug Mode must be either On or Off")
+            raise Exception("SmartPlug Mode must be either On or Off")
+
+        url = WISERSMARTPLUGURL.format(self.hubIP,smartPlugId)
+        patchData={"RequestOutput":smartPlugMode.title()}
+
+        _LOGGER.debug("Setting smartplug status patchdata {} ".format(patchData))
+        response = requests.patch(url=url.format(self.hubIP),
+                                  headers=self.headers,
+                                  json=self.patchData,
+                                  timeout=TIMEOUT)
+        if (response.status_code != 200):
+            _LOGGER.debug("Set smart plug error {} Response code = {}".format(response.text, response.status_code))
+            raise Exception("Error setting smartplug mode, msg {} , error {} {}".format(
+                self.response.status_code,
+                self.response.text))
