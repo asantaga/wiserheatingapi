@@ -1,5 +1,5 @@
 .. Wiser Heating API documentation master file, created by
-   sphinx-quickstart on Wed Feb  5 23:17:54 2020.
+   sphinx-quickstart on Wed Feb  5 23:27:19 2020.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
