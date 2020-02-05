@@ -54,7 +54,7 @@ try:
         room1schedule = wh.getRoomSchedule(1)
         json.dump(room1schedule, f)
         f.close()
-        print("File room4schedule.json created ")
+        print("File room1schedule.json created ")
     # Load schedule file and set schedule
     print("--------------------------------")
     print("Set room schedule for Room 1")

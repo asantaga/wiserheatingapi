@@ -39,6 +39,7 @@ __VERSION__ = "1.0.3"
 
 class wiserHub():
 
+
     def __init__(self,hubIP,secret):
         _LOGGER.info("WiserHub API Initialised : Version {}".format(__VERSION__))
         self.wiserHubData=None
@@ -79,7 +80,7 @@ class wiserHub():
 
     def refreshData(self):
         """
-        Forces a refresh of data
+        Forces a refresh of data from the wiser hub
         return: JSON Data
         """
         smartValves=[]
@@ -113,7 +114,7 @@ class wiserHub():
 
     def getHubData(self):
         """
-        Retrieves the full JSON payload , for functions where I havent provided a API yet
+        Retrieves the full JSON payload , for functions where I haven't provided a API yet
 
         returns : JSON Data
         """
@@ -280,7 +281,12 @@ class wiserHub():
         return True
         
     def setSystemSwitch(self, switch, mode = False):
-        
+        """
+        Sets a system switch. For details of which switches to set look at the System section of the payload from the wiserhub
+        :param switch: Name of Switch
+        :param mode: Value of mode
+        :return:
+        """
         self.patchData = {switch : mode }
         self.url = WISERHUBURL + "System"
         
@@ -518,10 +524,14 @@ class wiserHub():
         _LOGGER.debug("Setting smartplug status patchdata {} ".format(patchData))
         response = requests.patch(url=url.format(self.hubIP),
                                   headers=self.headers,
-                                  json=self.patchData,
+                                  json=patchData,
                                   timeout=TIMEOUT)
         if (response.status_code != 200):
-            _LOGGER.debug("Set smart plug error {} Response code = {}".format(response.text, response.status_code))
-            raise Exception("Error setting smartplug mode, msg {} , error {} {}".format(
-                self.response.status_code,
-                self.response.text))
+            if (response.status_code==404):
+                _LOGGER.debug("Set smart plug not found error ")
+                raise Exception("Set smart plug {} not found error".format(smartPlugId))
+            else:
+                _LOGGER.debug("Set smart plug error {} Response code = {}".format(response.text, response.status_code))
+                raise Exception("Error setting smartplug mode, msg {} , error {}".format(
+                    response.status_code,
+                    response.text))
