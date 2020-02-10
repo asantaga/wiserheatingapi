@@ -1,6 +1,7 @@
 from wiserHeatingAPI import wiserHub
 import logging
 import json
+import time
 
 _LOGGER = logging.getLogger(__name__)
 _LOGGER.setLevel(logging.DEBUG)
@@ -8,44 +9,47 @@ _LOGGER.setLevel(logging.DEBUG)
 # Get Wiser Parameters from keyfile
 with open('wiserkeys.params', 'r') as f:
             data = f.read().split('\n')
-wiserkey=""
-wiserip=""
+wiserkey = ""
+wiserip = ""
 
 # Get wiserkey/hubIp from wiserkeys.params file
 # This file is not source controlled as it contains the testers secret etc
 
 for lines in data:
-   line=lines.split('=')
-   if line[0]=='wiserkey':
-      wiserkey=line[1]
-   if line[0]=='wiserhubip':
-      wiserip=line[1]
+    line = lines.split('=')
+    if line[0] == 'wiserkey':
+        wiserkey = line[1]
+    if line[0] == 'wiserhubip':
+        wiserip = line[1]
 
-print (' Wiser Hub IP= {} , WiserKey= {}'.format(wiserip,wiserkey))
+print(' Wiser Hub IP= {} , WiserKey= {}'.format(wiserip, wiserkey))
 
-f.close
 
 try:
-#
-    
-    wh = wiserHub.wiserHub(wiserip,wiserkey)
+    wh = wiserHub.wiserHub(wiserip, wiserkey)
     # wh.refreshdata()
     # print("itrv 8 is in room {}".format(wh.getDeviceRoom(8)['roomName']))
     # Heating State
-    print ("Hot water status {} ".format(wh.getHotwaterRelayStatus()))
-    print ("Roomstat humidity {}".format(wh.getRoomStatData(1).get("MeasuredHumidity")))
+    print("Hot water status {} ".format(wh.getHotwaterRelayStatus()))
+    print("Roomstat humidity {}".format(wh.getRoomStatData(1).
+                                        get("MeasuredHumidity")))
 
 
-    print ("Devices")
-    print ("--------------------------------")
+    print("Devices")
+    print("--------------------------------")
 
     for device in wh.getDevices():
-        print ("Device : Id {} Name {} Type {} , SignalStrength {}  ".format(device.get("id"),device.get("Name"),device.get("ProductType"),device.get("DisplayedSignalStrength")))
+        print("Device : Id {} Name {} Type {} , SignalStrength {}  ".
+              format(device.get("id"),
+                     device.get("Name"),
+                     device.get("ProductType"),
+                     device.get("DisplayedSignalStrength")
+                     )
+              )
 
-    
     print("--------------------------------")
-    print ("Schedule for Room1 {}".format(wh.getRoomSchedule(4)))
-    print ("--------------------------------")
+    print("Schedule for Room1 {}".format(wh.getRoomSchedule(4)))
+    print("--------------------------------")
 
     # Query Schedule for Room1
     # Big assumption there is always a room 1 :-)
@@ -61,7 +65,7 @@ try:
     with open('./room1schedule.json', 'r') as f:
         data = json.load(f)
         wh.setRoomSchedule(1, data)
-        f.close
+
         print("Schedule for room 4 loaded indirectly from file")
 
     print("--------------------------------")
@@ -78,26 +82,44 @@ try:
     #    wh.copyRoomSchedule(4,3)
     print("--------------------------------")
 
-
     #  List all Rooms
   
-    findValve=0
-    roomName=None
+    findValve = 0
+    roomName = None
 
     for room in wh.getRooms():
-        smartValves=room.get("SmartValveIds")
+        smartValves = room.get("SmartValveIds")
         if smartValves is None: 
           print("Room {} has no smartValves")
         else:
-          print ("Room {}, setpoint={}C, current temp={}C".format(room.get("Name"),room.get("CurrentSetPoint")/10,room.get("CalculatedTemperature")/10    )    )
+          print("Room {}, setpoint={}C, current temp={}C".
+                format(room.get("Name"),
+                       room.get("CurrentSetPoint")/10,
+                       room.get("CalculatedTemperature")/10
+                       )
+                )
 
     # Find and set smartPlug on off
-    if (wh.getSmartPlugs() is not None):
+    if wh.getSmartPlugs() is not None:
         for smartPlug in wh.getSmartPlugs():
-            print("Smartplug ID {} Name {} OutputState {}".format(smartPlug.get("id"),smartPlug.get("Name"),smartPlug.get("OutputState")))
-            print("Setting Smartplug to current state")
-            #wh.setSmartPlugMode(smartPlug.get("id"),smartPlug.get("OutputState"))
-            wh.setSmartPlugMode(15,"Off")
+            smartPlugId=smartPlug.get("id")
+            print("Smartplug ID {} Name {} OutputState is {} Mode is {}".
+                  format(smartPlug.get("id"),
+                         smartPlug.get("Name"),
+                         wh.getSmartPlugState(smartPlugId),
+                         wh.getSmartPlugMode(smartPlugId)
+                  ))
+            print("Bouncing Plug {} ".format(smartPlugId))
+            originalPlugState=wh.getSmartPlugState(smartPlugId)
+            if originalPlugState == "On":
+                wh.setSmartPlugState(smartPlug.get("id"), "Off")
+                time.sleep(1)
+            else:
+                wh.setSmartPlugState(smartPlug.get("id"), "On")
+                time.sleep(1)
+            #Set back to original state
+            wh.setSmartPlugState(smartPlugId, originalPlugState)
+
 
 
 # Other Examples

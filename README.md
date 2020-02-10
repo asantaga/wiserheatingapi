@@ -1,4 +1,4 @@
-# Drayton Wiser Hub API v 1.0.5
+# Drayton Wiser Hub API v 1.0.5.1
 
 This repository contains a simple API which queries the Drayton Wiser Heating sysystem used in the UK.
 
@@ -8,7 +8,7 @@ The API functionality provides the following functionality
 - Ability to set temperature of room and TRV thermostats
 - Ability to query various data about the system (like heating status)
 - Ability to query and set schedules for rooms
-- Ability to query and set smartplugs
+- Ability to query and set smartplugs (modes and states)
 
 The project is closely associated with the Wiser HomeAssitant component availabe here https://github.com/asantaga/wiserHomeAssistantPlatform
 
@@ -66,7 +66,7 @@ Documentation available in apidocs.html and within comments in the code
 1.0.4 
 * Merged https://github.com/asantaga/wiserheatingapi/pull/9 : Schedule export/import
 
-1.0.5 
-* Added support for smartplugs
+1.0.5
+* Added support for smartplugs, both mode and state
   
 
