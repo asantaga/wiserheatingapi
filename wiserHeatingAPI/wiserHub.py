@@ -663,6 +663,15 @@ class wiserHub:
         self.checkHubData()
         return self.getHubData().get("SmartPlug")
 
+    def getSmartPlug(self,smartPlugId):
+        self.checkHubData()
+        if self.getHubData().get("SmartPlug") is not None:
+            for plug in self.getHubData().get("SmartPlug"):
+                if plug.get("id") == smartPlugId:
+                    return plug
+        # If we get here then the plug was not found
+        raise WiserNotFound("Unable to find smartPlug {}".format(smartPlugId))
+
     def getSmartPlugState(self, smartPlugId):
         self.checkHubData()
         if self.getHubData().get("SmartPlug") is not None:
