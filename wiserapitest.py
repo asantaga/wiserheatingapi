@@ -47,26 +47,28 @@ try:
                      )
               )
 
+    #Assume there room 1 :-)
+    scheduleRoomTest=1
     print("--------------------------------")
-    print("Schedule for Room1 {}".format(wh.getRoomSchedule(4)))
+    print("Schedule for Room1 {}".format(wh.getRoomSchedule(scheduleRoomTest)))
     print("--------------------------------")
 
     # Query Schedule for Room1
     # Big assumption there is always a room 1 :-)
     #
     with open('./room1schedule.json', 'w') as f:
-        room1schedule = wh.getRoomSchedule(1)
+        room1schedule = wh.getRoomSchedule(scheduleRoomTest)
         json.dump(room1schedule, f)
         f.close()
         print("File room1schedule.json created ")
     # Load schedule file and set schedule
     print("--------------------------------")
-    print("Set room schedule for Room 1")
+    print("Set room schedule for Room {}".format(scheduleRoomTest))
     with open('./room1schedule.json', 'r') as f:
         data = json.load(f)
-        wh.setRoomSchedule(1, data)
+        wh.setRoomSchedule(scheduleRoomTest, data)
 
-        print("Schedule for room 4 loaded indirectly from file")
+        print("Schedule for room {} loaded indirectly from file".format(scheduleRoomTest))
 
     print("--------------------------------")
     # Load schedule and set direct from file
@@ -87,15 +89,15 @@ try:
     findValve = 0
     roomName = None
 
-    for room in wh.getRooms():
-        smartValves = room.get("SmartValveIds")
+    for scheduleRoomTest in wh.getRooms():
+        smartValves = scheduleRoomTest.get("SmartValveIds")
         if smartValves is None: 
           print("Room {} has no smartValves")
         else:
           print("Room {}, setpoint={}C, current temp={}C".
-                format(room.get("Name"),
-                       room.get("CurrentSetPoint")/10,
-                       room.get("CalculatedTemperature")/10
+                format(scheduleRoomTest.get("Name"),
+                       scheduleRoomTest.get("CurrentSetPoint") / 10,
+                       scheduleRoomTest.get("CalculatedTemperature") / 10
                        )
                 )
 
