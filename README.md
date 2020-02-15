@@ -66,7 +66,7 @@ Documentation available in apidocs.html and within comments in the code
 1.0.4 
 * Merged https://github.com/asantaga/wiserheatingapi/pull/9 : Schedule export/import
 
-1.0.5
+1.0.5.2
 * Added support for smartplugs, both mode and state
   
 

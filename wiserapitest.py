@@ -27,15 +27,20 @@ print(' Wiser Hub IP= {} , WiserKey= {}'.format(wiserip, wiserkey))
 
 try:
     wh = wiserHub.wiserHub(wiserip, wiserkey)
-    # wh.refreshdata()
-    # print("itrv 8 is in room {}".format(wh.getDeviceRoom(8)['roomName']))
+
+    print("-------------------------------")
+    print("Running tests")
+    print("-------------------------------")
+
+    # Display some states
     # Heating State
     print("Hot water status {} ".format(wh.getHotwaterRelayStatus()))
+    # Assumes at least one roomstat
     print("Roomstat humidity {}".format(wh.getRoomStatData(1).
                                         get("MeasuredHumidity")))
 
-
-    print("Devices")
+    print("--------------------------------")
+    print("List of Devices")
     print("--------------------------------")
 
     for device in wh.getDevices():
@@ -46,8 +51,9 @@ try:
                      device.get("DisplayedSignalStrength")
                      )
               )
-
-    #Assume there room 1 :-)
+    #
+    #Assume there room 1 :-), otherwise what are you heating?
+    #
     scheduleRoomTest=1
     print("--------------------------------")
     print("Schedule for Room1 {}".format(wh.getRoomSchedule(scheduleRoomTest)))
@@ -82,6 +88,7 @@ try:
     print("Copy room schedule")
     print("Skipped")
     #    wh.copyRoomSchedule(4,3)
+
     print("--------------------------------")
 
     #  List all Rooms
@@ -89,6 +96,9 @@ try:
     findValve = 0
     roomName = None
 
+    print("--------------------------------")
+    print("Listing all Rooms")
+    print("--------------------------------")
     for scheduleRoomTest in wh.getRooms():
         smartValves = scheduleRoomTest.get("SmartValveIds")
         if smartValves is None: 
@@ -100,6 +110,10 @@ try:
                        scheduleRoomTest.get("CalculatedTemperature") / 10
                        )
                 )
+
+    print("--------------------------------")
+    print ("Listing all smartplugs")
+    print("--------------------------------")
 
     # Find and set smartPlug on off
     if wh.getSmartPlugs() is not None:
