@@ -154,7 +154,6 @@ class wiserHub:
                 self.hubIP), headers=self.headers, timeout=TIMEOUT)
                 
             resp.raise_for_status()
-            
             self.wiserHubData = resp.json()
             
             _LOGGER.debug(
@@ -546,8 +545,43 @@ class wiserHub:
         """
         _LOGGER.info(
             "Setting Home/Away mode to : {} {} C".format(mode, temperature))
+<<<<<<< HEAD
 
 
+        param toRoomId:
+        return: boolean
+        """
+        scheduleData = self.getRoomSchedule(fromRoomId)
+
+        print(json.dumps(scheduleData))
+
+        print("TYPE:{}".format(type(scheduleData)))
+
+        if scheduleData is not None:
+            self.setRoomSchedule(toRoomId, scheduleData)
+        else:
+            raise WiserNotFound(
+                "Error copying schedule.  One of the room Ids is not valid")
+
+    def setHomeAwayMode(self, mode, temperature=10):
+        """
+        Sets default Home or Away mode, optionally allows you to set a temperature for away mode
+
+        param mode: HOME   | AWAY
+
+        param temperature: Temperature between 5-30C or -20 for OFF
+
+        return:
+        """
+        _LOGGER.info(
+            "Setting Home/Away mode to : {} {} C".format(mode, temperature))
+<<<<<<< HEAD
+
+
+=======
+
+
+>>>>>>> 0383fc4613a5082742cdc4c5a552776411e01dac
         if mode not in ['HOME', 'AWAY']:
             raise ValueError("setAwayHome can only be HOME or AWAY")
 

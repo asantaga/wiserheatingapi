@@ -1,1 +1,1 @@
-name="wiser-heating-api"
+name = "wiser-heating-api"
