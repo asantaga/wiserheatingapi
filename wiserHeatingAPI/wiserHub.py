@@ -23,6 +23,7 @@ _LOGGER = logging.getLogger(__name__)
 Wiser Data URLS
 """
 WISERHUBURL = "http://{}/data/domain/"
+WISERNETWORKURL =  "http://{}/data/network/"
 WISERMODEURL = "http://{}/data/domain/System/RequestOverride"
 WISERSETROOMTEMP = "http://{}//data/domain/Room/{}"
 WISERROOM = "http://{}//data/domain/Room/{}"
@@ -76,6 +77,12 @@ class WiserHubDataNull(Error):
     _LOGGER.info("WiserHub data null after refresh")
     pass
 
+class WiserHubAuthenticationException(Error):
+    pass
+
+class WiserHubTimeoutException(Error):
+    pass
+
 
 class wiserHub:
 
@@ -83,6 +90,7 @@ class wiserHub:
         _LOGGER.info(
             "WiserHub API Initialised : Version {}".format(__VERSION__))
         self.wiserHubData = None
+        self.wiserNetworkData = None
         self.hubIP = hubIP
         self.hubSecret = secret
         self.headers = {'SECRET': self.hubSecret,
@@ -142,8 +150,12 @@ class wiserHub:
 
         _LOGGER.info("Updating Wiser Hub Data")
         try:
-            self.wiserHubData = requests.get(WISERHUBURL.format(
-                self.hubIP), headers=self.headers, timeout=TIMEOUT).json()
+            resp = requests.get(WISERHUBURL.format(
+                self.hubIP), headers=self.headers, timeout=TIMEOUT)
+                
+            resp.raise_for_status()
+            self.wiserHubData = resp.json()
+            
             _LOGGER.debug(
                 "Wiser Hub Data received {} ".format(self.wiserHubData))
             if self.getRooms() is not None:
@@ -169,9 +181,21 @@ class wiserHub:
                 _LOGGER.debug(" valve2roomMap{} ".format(self.device2roomMap))
             else:
                 _LOGGER.warning("Wiser found no rooms")
+
+            self.wiserNetworkData = requests.get(WISERNETWORKURL.format(
+                self.hubIP), headers=self.headers, timeout=TIMEOUT).json()
+
         except requests.Timeout:
             _LOGGER.debug(
                 "Connection timed out trying to update from Wiser Hub")
+            raise WiserHubTimeoutException("The connection timed out.")
+        except requests.HTTPError:
+            if self.wiserHubData.status_code == 401:
+                raise WiserHubAuthenticationException("Authentication error.  Check secret key.")
+            elif self.wiserHubData.status_code == 404:
+                raise WiserRESTException("Not Found.")
+            else:
+                raise WiserRESTException("Unknown Error.")
         except requests.ConnectionError:
             _LOGGER.debug("Connection error trying to update from Wiser Hub")
         return self.wiserHubData
@@ -186,6 +210,12 @@ class wiserHub:
         self.checkHubData()
         return self.wiserHubData
 
+    def getWiserHubName(self):
+        return self.wiserNetworkData.get("Station").get("MdnsHostname")
+        
+    def getMACAddress(self):
+        return self.wiserNetworkData.get("Station").get("MacAddress")
+        
     def getRooms(self):
         """
         Gets Room Data as JSON Payload
