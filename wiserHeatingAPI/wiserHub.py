@@ -16,6 +16,7 @@ import logging
 import requests
 import json
 import os
+import re
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -182,8 +183,10 @@ class wiserHub:
             else:
                 _LOGGER.warning("Wiser found no rooms")
 
-            self.wiserNetworkData = requests.get(WISERNETWORKURL.format(
-                self.hubIP), headers=self.headers, timeout=TIMEOUT).json()
+            # The Wiser Heat Hub can return invalid JSON, so remove all non-printable characters before trying to parse JSON
+            responseContent = requests.get(WISERNETWORKURL.format(self.hubIP), headers=self.headers, timeout=TIMEOUT).content
+            responseContent = re.sub(rb'[^\x20-\x7F]+', b'', responseContent)
+            self.WiserNetworkData = json.loads(responseContent)
 
         except requests.Timeout:
             _LOGGER.debug(
