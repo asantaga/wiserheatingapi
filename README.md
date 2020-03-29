@@ -46,7 +46,7 @@ To help understand the api simply look at the sample code ```wiserapitest.py``` 
 
 ## 6. Documentation
 
-Documentation available in apidocs.html and within comments in the code
+Documentation available in [docs](docs) directory and within comments in the code
 
 *Changelog*
 
@@ -72,4 +72,4 @@ Documentation available in apidocs.html and within comments in the code
 1.0.6
 * Added support for network data
 1.0.7
-* Minor enhancement to detect invalid JSON from the hub, thanks @TobyLL!
+* Merged [pull17](https://github.com/asantaga/wiserheatingapi/pull/17), Enhancement to detect invalid JSON from the hub, thanks @TobyLL!  fixed bug in getSmartplug state not working correctly
