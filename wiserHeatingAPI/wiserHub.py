@@ -781,10 +781,10 @@ class wiserHub:
         self.checkHubData()
         if self.getHubData().get("SmartPlug") is not None:
             for plug in self.getHubData().get("SmartPlug"):
-            # Fix for Issue #18
+
                 if plug.get("id") == smartPlugId:
-                    if plug.get("ControlSource") == "FromManualMode":
-                        return plug.get("ManualState")
+                    if plug.get("OutputState") is None:
+                        raise WiserNotFound("Unable to get State of smartPlug {}, is it offline?".format(smartPlugId))
                     else:
                         return plug.get("ScheduledState")
         # If we get here then the plug was not found
