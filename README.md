@@ -1,4 +1,4 @@
-# Drayton Wiser Hub API v 1.0.6
+# Drayton Wiser Hub API v 1.0.7
 
 This repository contains a simple API which queries the Drayton Wiser Heating sysystem used in the UK.
 
@@ -71,4 +71,5 @@ Documentation available in apidocs.html and within comments in the code
 
 1.0.6
 * Added support for network data
-
+1.0.7
+* Minor enhancement to detect invalid JSON from the hub, thanks @TobyLL!
