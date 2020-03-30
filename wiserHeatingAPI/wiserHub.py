@@ -230,13 +230,13 @@ class wiserHub:
     def getWiserHubName(self):
         mdns_name = self.wiserNetworkData.get("Station").get("MdnsHostname")
         if mdns_name is None:
-            mdns_name = ""
+            mdns_name = "NO_DNS_FOUND"
         return mdns_name
 
     def getMACAddress(self):
         mac_address = self.wiserNetworkData.get("Station").get("MacAddress")
         if mac_address is None:
-            mac_address = ""
+            mac_address = "NO_MAC_FOUND"
         return mac_address
 
     def getRooms(self):
