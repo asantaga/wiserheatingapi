@@ -38,7 +38,7 @@ TEMP_OFF = -20
 
 TIMEOUT = 5
 
-__VERSION__ = "1.0.3"
+__VERSION__ = "1.0.7.2"
 
 """
 Exception Handlers
