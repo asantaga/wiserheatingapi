@@ -87,6 +87,7 @@ class WiserHubAuthenticationException(Error):
 class WiserHubTimeoutException(Error):
     pass
 
+
 class WiserNoRoomsFound(Error):
     pass
 
@@ -199,7 +200,7 @@ class wiserHub:
                 timeout=TIMEOUT,
             ).content
             responseContent = re.sub(rb"[^\x20-\x7F]+", b"", responseContent)
-            self.WiserNetworkData = json.loads(responseContent)
+            self.wiserNetworkData = json.loads(responseContent)
 
         except requests.Timeout:
             _LOGGER.debug("Connection timed out trying to update from Wiser Hub")
@@ -215,6 +216,7 @@ class wiserHub:
                 raise WiserRESTException("Unknown Error.")
         except requests.ConnectionError:
             _LOGGER.debug("Connection error trying to update from Wiser Hub")
+            raise
         return self.wiserHubData
 
     def getHubData(self):
@@ -228,22 +230,16 @@ class wiserHub:
         return self.wiserHubData
 
     def getWiserHubName(self):
-        # Station Data is no longer available, using modelIdentifier instead
-        return self.getDevice(0).get("ModelIdentifier")
-
-#        mdns_name = self.wiserNetworkData.get("Station").get("MdnsHostname")
-#        if mdns_name is None:
-#            mdns_name = "NO_DNS_FOUND"
-#        return mdns_name
+        try:
+            return self.wiserNetworkData.get("Station").get("MdnsHostname")
+        except:
+            return self.getDevice(0).get("ModelIdentifier")
 
     def getMACAddress(self):
-        # Station Data is no longer available
-        return "NO_MAC_FOUND"
-
-#        mac_address = self.wiserNetworkData.get("Station").get("MacAddress")
-#        if mac_address is None:
-#            mac_address = "NO_MAC_FOUND"
-#        return mac_address
+        try:
+            return self.wiserNetworkData.get("Station").get("MacAddress")
+        except:
+            return "NO_MAC_FOUND"
 
     def getRooms(self):
         """
@@ -285,7 +281,10 @@ class wiserHub:
 
         """
         self.checkHubData()
-        return self.wiserHubData.get("HotWater")
+        try:
+            return self.wiserHubData.get("HotWater")
+        except:
+            return None
 
     def getHeatingChannels(self):
         """
@@ -363,7 +362,7 @@ class wiserHub:
         """
         If there is no hotwater object then return false
         """
-        if len(self.wiserHubData.get("HotWater")) < 1:
+        if not self.wiserHubData.get("HotWater"):
             return False
 
         return self.wiserHubData.get("HotWater")[0].get("WaterHeatingState")
@@ -799,7 +798,11 @@ class wiserHub:
 
                 if plug.get("id") == smartPlugId:
                     if plug.get("OutputState") is None:
-                        raise WiserNotFound("Unable to get State of smartPlug {}, is it offline?".format(smartPlugId))
+                        raise WiserNotFound(
+                            "Unable to get State of smartPlug {}, is it offline?".format(
+                                smartPlugId
+                            )
+                        )
                     else:
                         return plug.get("ScheduledState")
         # If we get here then the plug was not found
