@@ -31,7 +31,7 @@ try:
     print("-------------------------------")
     print("Running tests")
     print("-------------------------------")
-
+    print ("Model # {}".format(wh.getWiserHubName()))
     # Display some states
     # Heating State
     print("Hot water status {} ".format(wh.getHotwaterRelayStatus()))

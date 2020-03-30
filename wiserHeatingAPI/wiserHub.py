@@ -228,8 +228,9 @@ class wiserHub:
         return self.wiserHubData
 
     def getWiserHubName(self):
-        # Station Data is no longer available
-        return  "NO_DNS_FOUND"
+        # Station Data is no longer available, using modelIdentifier instead
+        return self.getDevice(0).get("ModelIdentifier")
+
 #        mdns_name = self.wiserNetworkData.get("Station").get("MdnsHostname")
 #        if mdns_name is None:
 #            mdns_name = "NO_DNS_FOUND"
