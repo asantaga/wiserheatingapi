@@ -59,7 +59,7 @@ class WiserNotFound(Error):
     pass
 
 
-class WiserNoRoomsFound(Error):
+class WiserNoRoosFound(Error):
     pass
 
 
@@ -85,6 +85,9 @@ class WiserHubAuthenticationException(Error):
 
 
 class WiserHubTimeoutException(Error):
+    pass
+
+class WiserNoRoomsFound(Error):
     pass
 
 
@@ -225,10 +228,16 @@ class wiserHub:
         return self.wiserHubData
 
     def getWiserHubName(self):
-        return self.wiserNetworkData.get("Station").get("MdnsHostname")
+        mdns_name = self.wiserNetworkData.get("Station").get("MdnsHostname")
+        if mdns_name is None:
+            mdns_name = ""
+        return mdns_name
 
     def getMACAddress(self):
-        return self.wiserNetworkData.get("Station").get("MacAddress")
+        mac_address = self.wiserNetworkData.get("Station").get("MacAddress")
+        if mac_address is None:
+            mac_address = ""
+        return mac_address
 
     def getRooms(self):
         """
