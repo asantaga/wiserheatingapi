@@ -706,14 +706,22 @@ class wiserHub:
                 }
             }
         elif mode.lower() == "manual":
-            # When setting to manual , set the temp to the current scheduled temp
-            setTemp = self.__fromWiserTemp(
-                self.getRoom(roomId).get("ScheduledSetPoint")
-            )
+            # Set to manual mode first if currently auto
+            if self.getRoom(roomId).get("Mode") == "Auto":
+                self.setRoomMode(roomId, "auto_to_manual")
+                # If already manual (ie off), set the temp to the current scheduled temp
+                setTemp = self.__fromWiserTemp(
+                    self.getRoom(roomId).get("CurrentSetPoint")
+                )
+            else:
+                # If already manual (ie off), set the temp to the current scheduled temp
+                setTemp = self.__fromWiserTemp(
+                    self.getRoom(roomId).get("ScheduledSetPoint")
+                )
+
             # If current scheduled temp is less than 5C then set to min temp
             setTemp = setTemp if setTemp >= TEMP_MINIMUM else TEMP_MINIMUM
             patchData = {
-                "Mode": "Manual",
                 "RequestOverride": {
                     "Type": "Manual",
                     "SetPoint": self.__toWiserTemp(setTemp),
@@ -721,13 +729,18 @@ class wiserHub:
             }
         # Implement trv off as per https://github.com/asantaga/wiserheatingapi/issues/3
         elif mode.lower() == "off":
+            # Set to manual mode first if currently auto
+            if self.getRoom(roomId).get("Mode") == "Auto":
+                self.setRoomMode(roomId, "auto_to_manual")
+
             patchData = {
-                "Mode": "Manual",
                 "RequestOverride": {
                     "Type": "Manual",
                     "SetPoint": self.__toWiserTemp(TEMP_OFF),
                 },
             }
+        elif mode.lower() == "auto_to_manual":
+            patchData = {"Mode": "Manual"}
         else:
             raise ValueError(
                 "Error setting setting room mode, received  {} but should be auto,boost,off or manual ".format(
