@@ -1,4 +1,4 @@
-# Drayton Wiser Hub API v 1.0.7.2
+# Drayton Wiser Hub API v 1.0.8
 
 This repository contains a simple API which queries the Drayton Wiser Heating sysystem used in the UK.
 
@@ -73,3 +73,6 @@ Documentation available in [docs](docs) directory and within comments in the cod
 * Added support for network data
 1.0.7
 * Merged [pull17](https://github.com/asantaga/wiserheatingapi/pull/17), Enhancement to detect invalid JSON from the hub, thanks @TobyLL!  fixed bug in getSmartplug state not working correctly
+1.0.8 
+* Merged [pull20(https://github.com/asantaga/wiserheatingapi/pull/20 ) Fix for TRVs not keeping off setting
+
