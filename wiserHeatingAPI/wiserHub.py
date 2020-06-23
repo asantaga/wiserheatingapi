@@ -38,7 +38,7 @@ TEMP_OFF = -20
 
 TIMEOUT = 5
 
-__VERSION__ = "1.0.7.2"
+__VERSION__ = "1.0.8.1"
 
 """
 Exception Handlers
@@ -94,7 +94,9 @@ class WiserNoRoomsFound(Error):
 
 class wiserHub:
     def __init__(self, hubIP, secret):
-        _LOGGER.info("WiserHub API Initialised : Version {}".format(__VERSION__))
+        _LOGGER.info(
+            "WiserHub API Initialised : Version {}".format(__VERSION__)
+        )
         self.wiserHubData = None
         self.wiserNetworkData = None
         self.hubIP = hubIP
@@ -146,7 +148,9 @@ class wiserHub:
         if self.wiserHubData is None:
             self.refreshData()
         if self.wiserHubData is None:
-            raise WiserHubDataNull("Hub data null even after refresh, aborting request")
+            raise WiserHubDataNull(
+                "Hub data null even after refresh, aborting request"
+            )
         # Otherwise continue
 
     def refreshData(self):
@@ -158,13 +162,17 @@ class wiserHub:
         _LOGGER.info("Updating Wiser Hub Data")
         try:
             resp = requests.get(
-                WISERHUBURL.format(self.hubIP), headers=self.headers, timeout=TIMEOUT
+                WISERHUBURL.format(self.hubIP),
+                headers=self.headers,
+                timeout=TIMEOUT,
             )
 
             resp.raise_for_status()
             self.wiserHubData = resp.json()
 
-            _LOGGER.debug("Wiser Hub Data received {} ".format(self.wiserHubData))
+            _LOGGER.debug(
+                "Wiser Hub Data received {} ".format(self.wiserHubData)
+            )
             if self.getRooms() is not None:
                 for room in self.getRooms():
                     roomStatId = room.get("RoomStatId")
@@ -193,7 +201,8 @@ class wiserHub:
             else:
                 _LOGGER.warning("Wiser found no rooms")
 
-            # The Wiser Heat Hub can return invalid JSON, so remove all non-printable characters before trying to parse JSON
+            # The Wiser Heat Hub can return invalid JSON, so remove all
+            # non-printable characters before trying to parse JSON
             responseContent = requests.get(
                 WISERNETWORKURL.format(self.hubIP),
                 headers=self.headers,
@@ -203,14 +212,16 @@ class wiserHub:
             self.wiserNetworkData = json.loads(responseContent)
 
         except requests.Timeout:
-            _LOGGER.debug("Connection timed out trying to update from Wiser Hub")
+            _LOGGER.debug(
+                "Connection timed out trying to update from Wiser Hub"
+            )
             raise WiserHubTimeoutException("The connection timed out.")
-        except requests.HTTPError:
-            if self.wiserHubData.status_code == 401:
+        except requests.HTTPError as ex:
+            if ex.response.status_code == 401:
                 raise WiserHubAuthenticationException(
                     "Authentication error.  Check secret key."
                 )
-            elif self.wiserHubData.status_code == 404:
+            elif ex.response.status_code == 404:
                 raise WiserRESTException("Not Found.")
             else:
                 raise WiserRESTException("Unknown Error.")
@@ -331,7 +342,9 @@ class wiserHub:
         """
         self.checkHubData()
         _LOGGER.debug(
-            " getDeviceRoom called, valve2roomMap is {} ".format(self.device2roomMap)
+            " getDeviceRoom called, valve2roomMap is {} ".format(
+                self.device2roomMap
+            )
         )
         if not self.device2roomMap:
             self.refreshData()
@@ -379,15 +392,20 @@ class wiserHub:
         DHWOffTemp = -200
 
         modeMapping = {
-            "on": {"RequestOverride": {"Type": "Manual", "SetPoint": DHWOnTemp}},
-            "off": {"RequestOverride": {"Type": "Manual", "SetPoint": DHWOffTemp}},
+            "on": {
+                "RequestOverride": {"Type": "Manual", "SetPoint": DHWOnTemp}
+            },
+            "off": {
+                "RequestOverride": {"Type": "Manual", "SetPoint": DHWOffTemp}
+            },
             "auto": {"RequestOverride": {"Type": "None", "Mode": "Auto"}},
         }
 
         _mode = mode.lower()
         if _mode not in ["on", "off", "auto"]:
             raise ValueError(
-                "Hot Water can be either 'on', 'off' or 'auto' - not '%s'" % _mode
+                "Hot Water can be either 'on', 'off' or 'auto' - not '%s'"
+                % _mode
             )
 
         # Obtain our DHW control ID
@@ -397,13 +415,17 @@ class wiserHub:
 
         _url = WISERHUBURL.format(self.hubIP) + "/HotWater/{}/".format(DHWId)
         _LOGGER.debug(
-            "Sending Patch Data: {}, to URL [{}]".format(modeMapping.get(_mode), _url)
+            "Sending Patch Data: {}, to URL [{}]".format(
+                modeMapping.get(_mode), _url
+            )
         )
         response = requests.patch(
             url=_url, headers=self.headers, json=modeMapping.get(_mode)
         )
         if response.status_code != 200:
-            _LOGGER.debug("Set DHW Response code = {}".format(response.status_code))
+            _LOGGER.debug(
+                "Set DHW Response code = {}".format(response.status_code)
+            )
             raise WiserRESTException(
                 "Error setting hot water mode to {}, error {} {}".format(
                     _mode, response.status_code, response.text
@@ -431,7 +453,9 @@ class wiserHub:
         )
         if response.status_code != 200:
             _LOGGER.debug(
-                "Set {} Response code = {}".format(switch, response.status_code)
+                "Set {} Response code = {}".format(
+                    switch, response.status_code
+                )
             )
             raise WiserRESTException(
                 "Error setting {} , error {} {}".format(
@@ -472,16 +496,22 @@ class wiserHub:
         self.checkHubData()
 
         if self.getRoom(roomId) is None:
-            raise WiserNotFound("getRoomSchedule for room {} not found ".format(roomId))
+            raise WiserNotFound(
+                "getRoomSchedule for room {} not found ".format(roomId)
+            )
 
         scheduleId = self.getRoom(roomId).get("ScheduleId")
         if scheduleId is not None:
             for schedule in self.wiserHubData.get("Schedule"):
                 if schedule.get("id") == scheduleId:
                     return schedule
-            raise WiserNotFound("getRoomSchedule for room {} not found ".format(roomId))
+            raise WiserNotFound(
+                "getRoomSchedule for room {} not found ".format(roomId)
+            )
         else:
-            raise WiserNotFound("getRoomSchedule for room {} not found ".format(roomId))
+            raise WiserNotFound(
+                "getRoomSchedule for room {} not found ".format(roomId)
+            )
 
     def setRoomSchedule(self, roomId, scheduleData: dict):
         """
@@ -504,7 +534,9 @@ class wiserHub:
 
             if response.status_code != 200:
                 _LOGGER.debug(
-                    "Set Schedule Response code = {}".format(response.status_code)
+                    "Set Schedule Response code = {}".format(
+                        response.status_code
+                    )
                 )
                 raise WiserRESTException(
                     "Error setting schedule for room {} , error {} {}".format(
@@ -530,7 +562,9 @@ class wiserHub:
                     with open(scheduleFile, "r") as f:
                         scheduleData = json.load(f)
                 except:
-                    raise Exception("Error reading file {}".format(scheduleFile))
+                    raise Exception(
+                        "Error reading file {}".format(scheduleFile)
+                    )
 
                 patchData = scheduleData
                 response = requests.patch(
@@ -542,7 +576,9 @@ class wiserHub:
 
                 if response.status_code != 200:
                     _LOGGER.debug(
-                        "Set Schedule Response code = {}".format(response.status_code)
+                        "Set Schedule Response code = {}".format(
+                            response.status_code
+                        )
                     )
                     raise WiserRESTException(
                         "Error setting schedule for room {} , error {} {}".format(
@@ -589,14 +625,18 @@ class wiserHub:
 
         return:
         """
-        _LOGGER.info("Setting Home/Away mode to : {} {} C".format(mode, temperature))
+        _LOGGER.info(
+            "Setting Home/Away mode to : {} {} C".format(mode, temperature)
+        )
 
         if mode not in ["HOME", "AWAY"]:
             raise ValueError("setAwayHome can only be HOME or AWAY")
 
         if mode == "AWAY":
             if temperature is None:
-                raise ValueError("setAwayHome set to AWAY but not temperature set")
+                raise ValueError(
+                    "setAwayHome set to AWAY but not temperature set"
+                )
             if not (self.__checkTempRange(temperature)):
                 raise ValueError(
                     "setAwayHome temperature can only be between {} and {} or {}(Off)".format(
@@ -606,7 +646,10 @@ class wiserHub:
         _LOGGER.info("Setting Home/Away : {}".format(mode))
 
         if mode == "AWAY":
-            patchData = {"type": 2, "setPoint": self.__toWiserTemp(temperature)}
+            patchData = {
+                "type": 2,
+                "setPoint": self.__toWiserTemp(temperature),
+            }
         else:
             patchData = {"type": 0, "setPoint": 0}
         _LOGGER.debug("patchdata {} ".format(patchData))
@@ -632,7 +675,9 @@ class wiserHub:
         param roomId:  The Room ID
         param temperature:  The temperature in celcius from 5 to 30, -20 for Off
         """
-        _LOGGER.info("Set Room {} Temperature to = {} ".format(roomId, temperature))
+        _LOGGER.info(
+            "Set Room {} Temperature to = {} ".format(roomId, temperature)
+        )
         if not (self.__checkTempRange(temperature)):
             raise ValueError(
                 "SetRoomTemperature : value of temperature must be between {} and {} OR {} (off)".format(
@@ -661,7 +706,9 @@ class wiserHub:
                 "Error setting temperature, error {} ".format(response.text)
             )
         _LOGGER.debug(
-            "Set room Temp, error {} ({})".format(response.status_code, response.text)
+            "Set room Temp, error {} ({})".format(
+                response.status_code, response.text
+            )
         )
 
     # Set Room Mode (Manual, Boost,Off or Auto )
@@ -767,9 +814,13 @@ class wiserHub:
             )
             if response.status_code != 200:
                 _LOGGER.error(
-                    "Cancelling boost resulted in {}".format(response.status_code)
+                    "Cancelling boost resulted in {}".format(
+                        response.status_code
+                    )
                 )
-                raise WiserRESTException("Error cancelling boost {} ".format(mode))
+                raise WiserRESTException(
+                    "Error cancelling boost {} ".format(mode)
+                )
 
         # Set new mode
         response = requests.patch(
@@ -785,10 +836,14 @@ class wiserHub:
                 )
             )
             raise WiserRESTException(
-                "Error setting mode to {}, error {} ".format(mode, response.text)
+                "Error setting mode to {}, error {} ".format(
+                    mode, response.text
+                )
             )
         _LOGGER.debug(
-            "Set room mode, error {} ({})".format(response.status_code, response.text)
+            "Set room mode, error {} ({})".format(
+                response.status_code, response.text
+            )
         )
 
     def getSmartPlugs(self):
@@ -824,7 +879,9 @@ class wiserHub:
     def setSmartPlugState(self, smartPlugId, smartPlugState):
         if smartPlugState is None:
             _LOGGER.error("SmartPlug State is None, must be either On or Off")
-            raise ValueError("SmartPlug State is None, must be either On or Off")
+            raise ValueError(
+                "SmartPlug State is None, must be either On or Off"
+            )
         if smartPlugState.title() not in ["On", "Off"]:
             _LOGGER.error("SmartPlug State must be either On or Off")
             raise ValueError("SmartPlug State must be either On or Off")
@@ -832,7 +889,9 @@ class wiserHub:
         url = WISERSMARTPLUGURL.format(self.hubIP, smartPlugId)
         patchData = {"RequestOutput": smartPlugState.title()}
 
-        _LOGGER.debug("Setting smartplug status patchdata {} ".format(patchData))
+        _LOGGER.debug(
+            "Setting smartplug status patchdata {} ".format(patchData)
+        )
         response = requests.patch(
             url=url.format(self.hubIP),
             headers=self.headers,
@@ -875,7 +934,9 @@ class wiserHub:
         url = WISERSMARTPLUGURL.format(self.hubIP, smartPlugId)
         patchData = {"Mode": smartPlugMode.title()}
 
-        _LOGGER.debug("Setting smartplug status patchdata {} ".format(patchData))
+        _LOGGER.debug(
+            "Setting smartplug status patchdata {} ".format(patchData)
+        )
         response = requests.patch(
             url=url.format(self.hubIP),
             headers=self.headers,
