@@ -36,9 +36,11 @@ TEMP_MINIMUM = 5
 TEMP_MAXIMUM = 30
 TEMP_OFF = -20
 
-TIMEOUT = 10
+DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
 
-__VERSION__ = "1.0.9.0"
+TIMEOUT = 15
+
+__VERSION__ = "1.0.8.2"
 
 """
 Exception Handlers
@@ -137,6 +139,30 @@ class wiserHub:
             return False
         else:
             return True
+
+    def __getNextDay(self, day):
+        """
+        Finds the next day of week
+        param day: The day to convert
+        return: string
+        """
+        i = DAYS.index(day)
+        i += 1
+        if i > 6:
+            i = 0
+        return DAYS[i]
+
+    def __getPrevDay(self, day):
+        """
+        Finds the previous day of week
+        param day: The day to convert
+        return: string
+        """
+        i = DAYS.index(day)
+        i -= 1
+        if i < 0:
+            i = 6
+        return DAYS[i]
 
     def checkHubData(self):
         """
@@ -633,6 +659,65 @@ class wiserHub:
         else:
             raise WiserNotFound("No schedule found that matches roomId")
 
+    def setRoomScheduleAdvance(self, roomId):
+        """
+        Emulates the "Advance" button on a central heating controller
+	    Advances the temperature in a room to the next set point
+        param roomId: The id number of the room
+        """
+        name = self.getRoom(roomId).get("Name")
+        roomschedule = self.getRoomSchedule(roomId)
+        local_date_time = self.getSystem().get("LocalDateAndTime")
+        current_day = local_date_time.get("Day")
+        current_time = local_date_time.get("Time")
+        _LOGGER.info("{} {}".format(current_day,current_time))
+        set_points = roomschedule.get(current_day).get("SetPoints")
+        _LOGGER.info("{}".format(set_points))
+        for setpoint in set_points:
+            _LOGGER.debug("Set point time: {} temp: {}".format(setpoint.get("Time"), setpoint.get("DegreesC")))
+            if setpoint.get("Time") > current_time:
+                new_temp = round(setpoint.get("DegreesC") / 10, 1)
+                _LOGGER.info("Using set point at {}".format(setpoint.get("Time")))			
+                break
+        if set_points[-1].get("Time") <= current_time: # set point is next day
+            set_points = roomschedule.get(self.__getNextDay(current_day)).get("SetPoints")
+            _LOGGER.info(
+               "Using set point on {} at {}".format(self.__getNextDay(current_day), set_points[0].get("Time"))
+            )
+            new_temp = round(set_points[0].get("DegreesC") /10, 1) # use first setpoint temp of next day
+					
+        _LOGGER.info("Advance {} to {} DegreesC".format(name, new_temp))
+        self.setRoomTemperature(roomId, new_temp)
+
+    def setRoomScheduleAdvanceUndo(self, roomId):
+        """
+        Undoes any Advance of the temperature in the room, reverts it back to the scheduled set temperature
+        param roomId: The id number of the room
+        """
+        name = self.getRoom(roomId).get("Name")
+        roomschedule = self.getRoomSchedule(roomId)
+        local_date_time = self.getSystem().get("LocalDateAndTime")
+        current_day = local_date_time.get("Day")
+        current_time = local_date_time.get("Time")
+        _LOGGER.info("{} {}".format(current_day,current_time))
+        set_points = roomschedule.get(current_day).get("SetPoints")
+        _LOGGER.info("{}".format(set_points))
+        for setpoint in reversed(set_points):
+            _LOGGER.debug("{} {}".format(setpoint.get("Time"), setpoint.get("DegreesC")))
+            if setpoint.get("Time") <= current_time:
+                new_temp = round(setpoint.get("DegreesC") / 10, 1)
+                _LOGGER.info("Using set point at {}".format(setpoint.get("Time")))
+                break
+        if set_points[0].get("Time") > current_time: # set point is prev day
+            set_points = roomschedule.get(self.__getPrevDay(current_day)).get("SetPoints")
+            _LOGGER.info(
+                "Using set point on {} at {}".format(self.__getPrevDay(current_day), set_points[-1].get("Time"))
+            )
+            new_temp = round(set_points[-1].get("DegreesC") /10, 1) # use last setpoint temp of prev day
+
+        _LOGGER.info("AdvanceUndo {} to {} DegreesC".format(name, new_temp))
+        self.setRoomTemperature(roomId, new_temp)
+
     def setRoomScheduleFromFile(self, roomId, scheduleFile: str):
         """
         Sets Room Schedule
@@ -1010,3 +1095,5 @@ class wiserHub:
                         response.status_code, response.text
                     )
                 )
+
+	
