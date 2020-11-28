@@ -36,9 +36,9 @@ TEMP_MINIMUM = 5
 TEMP_MAXIMUM = 30
 TEMP_OFF = -20
 
-TIMEOUT = 5
+TIMEOUT = 10
 
-__VERSION__ = "1.0.8.1"
+__VERSION__ = "1.0.9.0"
 
 """
 Exception Handlers
@@ -486,32 +486,138 @@ class wiserHub:
             "getRoomStatData for deviceID {} not found due".format(deviceId)
         )
 
+    def getSchedule(self, scheduleId):
+        """
+        Get Schedule by Schedule ID
+        
+        param scheduleId:
+        return: json data
+        """
+        self.checkHubData()
+        for schedule in self.wiserHubData.get("Schedule"):
+                if schedule.get("id") == scheduleId:
+                    return schedule
+        
+        raise WiserNotFound(
+            "Schedule with id {} not found ".format(scheduleId)
+        )
+
+    def setSchedule(self, scheduleId, scheduleData: dict):
+        """
+        Set Schedule by Schedule ID
+        
+        param scheduleId:
+        param scheduleData:
+        return: boolean
+        """
+        self.checkHubData()
+
+        for schedule in self.wiserHubData.get("Schedule"):
+                if schedule.get("id") == scheduleId:
+                    patchData = scheduleData
+                    response = requests.patch(
+                        url=WISERSCHEDULEURL.format(self.hubIP, scheduleId),
+                        headers=self.headers,
+                        json=patchData,
+                        timeout=TIMEOUT,
+                    )
+
+                    if response.status_code != 200:
+                        _LOGGER.debug(
+                            "Set Schedule Response code = {}".format(
+                                response.status_code
+                            )
+                        )
+                        raise WiserRESTException(
+                            "Error setting schedule for id {} , error {} {}".format(
+                                scheduleId, response.status_code, response.text
+                            )
+                        )
+                    else:
+                        return True
+        raise WiserNotFound("No schedule found that matches id")
+
+    def setScheduleFromFile(self, scheduleId, scheduleFile: str):
+        """
+        Sets Schedule from File
+
+        param scheduleId:
+        param scheduleData: json data for schedule
+        return: boolen
+        """
+        for schedule in self.wiserHubData.get("Schedule"):
+                if schedule.get("id") == scheduleId:
+                    if os.path.exists(scheduleFile):
+                        try:
+                            with open(scheduleFile, "r") as f:
+                                scheduleData = json.load(f)
+                        except:
+                            raise Exception(
+                                "Error reading file {}".format(scheduleFile)
+                            )
+
+                        patchData = scheduleData
+                        response = requests.patch(
+                            url=WISERSCHEDULEURL.format(self.hubIP, scheduleId),
+                            headers=self.headers,
+                            json=patchData,
+                            timeout=TIMEOUT,
+                        )
+
+                        if response.status_code != 200:
+                            _LOGGER.debug(
+                                "Set Schedule Response code = {}".format(
+                                    response.status_code
+                                )
+                            )
+                            raise WiserRESTException(
+                                "Error setting schedule {} , error {} {}".format(
+                                    scheduleId, response.status_code, response.text
+                                )
+                            )
+                        else:
+                            return True
+                    else:
+                        raise FileNotFoundError(
+                            "Schedule file, {}, not found.".format(
+                                os.path.abspath(scheduleFile)
+                            )
+                        )
+        raise WiserNotFound("No schedule found that matches Id")
+
+    def copySchedule(self, fromScheduleId, toScheduleId):
+        """
+        Copies schedule from one id to another
+
+        param fromScheduleId:
+        param toScheduleId:
+        return:
+        """
+        scheduleData = self.getSchedule(fromScheduleId)
+
+        if scheduleData is not None:
+            self.setSchedule(toScheduleId, scheduleData)
+        else:
+            raise WiserNotFound(
+                "Error copying schedule.  One of the schedule Ids is not valid"
+            )
+
     def getRoomSchedule(self, roomId):
         """
         Gets Room Schedule Data
-        
         param roomId:
         return: json data
         """
         self.checkHubData()
-
-        if self.getRoom(roomId) is None:
+        try:
+            scheduleId = self.getRoom(roomId).get("ScheduleId",0)
+            if scheduleId > 0:
+                return self.getSchedule(scheduleId)
+        except:
             raise WiserNotFound(
-                "getRoomSchedule for room {} not found ".format(roomId)
+                "Schedule for room {} not found".format(roomId)
             )
 
-        scheduleId = self.getRoom(roomId).get("ScheduleId")
-        if scheduleId is not None:
-            for schedule in self.wiserHubData.get("Schedule"):
-                if schedule.get("id") == scheduleId:
-                    return schedule
-            raise WiserNotFound(
-                "getRoomSchedule for room {} not found ".format(roomId)
-            )
-        else:
-            raise WiserNotFound(
-                "getRoomSchedule for room {} not found ".format(roomId)
-            )
 
     def setRoomSchedule(self, roomId, scheduleData: dict):
         """
@@ -521,28 +627,9 @@ class wiserHub:
         param scheduleData: json data for schedule
         return:
         """
-        scheduleId = self.getRoom(roomId).get("ScheduleId")
-
-        if scheduleId is not None:
-            patchData = scheduleData
-            response = requests.patch(
-                url=WISERSCHEDULEURL.format(self.hubIP, scheduleId),
-                headers=self.headers,
-                json=patchData,
-                timeout=TIMEOUT,
-            )
-
-            if response.status_code != 200:
-                _LOGGER.debug(
-                    "Set Schedule Response code = {}".format(
-                        response.status_code
-                    )
-                )
-                raise WiserRESTException(
-                    "Error setting schedule for room {} , error {} {}".format(
-                        roomId, response.status_code, response.text
-                    )
-                )
+        scheduleId = self.getRoom(roomId).get("ScheduleId",0)
+        if scheduleId > 0:
+            self.setSchedule(scheduleId, scheduleData)
         else:
             raise WiserNotFound("No schedule found that matches roomId")
 
@@ -554,43 +641,10 @@ class wiserHub:
         param scheduleData: json data for schedule
         return:
         """
-        scheduleId = self.getRoom(roomId).get("ScheduleId")
+        scheduleId = self.getRoom(roomId).get("ScheduleId",0)
 
-        if scheduleId is not None:
-            if os.path.exists(scheduleFile):
-                try:
-                    with open(scheduleFile, "r") as f:
-                        scheduleData = json.load(f)
-                except:
-                    raise Exception(
-                        "Error reading file {}".format(scheduleFile)
-                    )
-
-                patchData = scheduleData
-                response = requests.patch(
-                    url=WISERSCHEDULEURL.format(self.hubIP, scheduleId),
-                    headers=self.headers,
-                    json=patchData,
-                    timeout=TIMEOUT,
-                )
-
-                if response.status_code != 200:
-                    _LOGGER.debug(
-                        "Set Schedule Response code = {}".format(
-                            response.status_code
-                        )
-                    )
-                    raise WiserRESTException(
-                        "Error setting schedule for room {} , error {} {}".format(
-                            roomId, response.status_code, response.text
-                        )
-                    )
-            else:
-                raise FileNotFoundError(
-                    "Schedule file, {}, not found.".format(
-                        os.path.abspath(scheduleFile)
-                    )
-                )
+        if scheduleId > 0:
+            self.setScheduleFromFile(scheduleId, scheduleFile)
         else:
             raise WiserNotFound("No schedule found that matches roomId")
 
@@ -602,19 +656,15 @@ class wiserHub:
         param toRoomId:
         return: boolean
         """
-        scheduleData = self.getRoomSchedule(fromRoomId)
-
-        print(json.dumps(scheduleData))
-
-        print("TYPE:{}".format(type(scheduleData)))
-
-        if scheduleData is not None:
-            self.setRoomSchedule(toRoomId, scheduleData)
+        fromScheduleId = self.getRoom(fromRoomId).get("ScheduleId",0)
+        toScheduleId = self.getRoom(toRoomId).get("ScheduleId",0)
+        if fromScheduleId > 0 and toScheduleId > 0:
+            self.copySchedule(fromScheduleId, toScheduleId)
         else:
             raise WiserNotFound(
                 "Error copying schedule.  One of the room Ids is not valid"
             )
-
+ 
     def setHomeAwayMode(self, mode, temperature=10):
         """
         Sets default Home or Away mode, optionally allows you to set a temperature for away mode
