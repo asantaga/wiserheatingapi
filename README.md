@@ -1,4 +1,4 @@
-# Drayton Wiser Hub API v 1.0.9
+# Drayton Wiser Hub API v 1.0.10
 
 This repository contains a simple API which queries the Drayton Wiser Heating sysystem used in the UK.
 
@@ -48,6 +48,9 @@ To help understand the api simply look at the sample code ```wiserapitest.py``` 
 
 Documentation available in [docs](docs) directory and within comments in the code
 
+Additionally @steversig has also created a repository with some nice examples which be of use, see https://github.com/steversig/wiserheatingapi-examples
+
+
 *Changelog*
 
 1.0.2.1 
@@ -77,4 +80,7 @@ Documentation available in [docs](docs) directory and within comments in the cod
 * Merged [pull20(https://github.com/asantaga/wiserheatingapi/pull/20 ) Fix for TRVs not keeping off setting
 1.0.9
 * Ability to get,set and copy schedules for all devices
+
+1.0.10
+* Added PR#23: Added setRoomScheduleAvance and other APIs from @stevesig (thank you!)
 

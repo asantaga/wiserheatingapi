@@ -40,7 +40,7 @@ DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
 
 TIMEOUT = 15
 
-__VERSION__ = "1.0.8.2"
+__VERSION__ = "1.0.10"
 
 """
 Exception Handlers
