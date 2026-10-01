@@ -1,5 +1,11 @@
 # Drayton Wiser Hub API v 1.0.10
 
+# Notice
+# ___________________________________________________
+# This repository is now deprecated you should be using https://github.com/msp1974/aioWiserHeatAPI instead
+# .
+# .
+
 This repository contains a simple API which queries the Drayton Wiser Heating sysystem used in the UK.
 
 The API functionality provides the following functionality
